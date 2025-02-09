@@ -8,4 +8,22 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BusinessObjects\BusinessObjects.csproj" />
+  </ItemGroup>
+
 </Project>
