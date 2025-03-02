@@ -30,6 +30,18 @@ namespace DataAccess.Repository
                 throw new Exception(e.Message);
             }
         }
+        public User GetUserById(int id)
+        {
+            try
+            {
+                var context = new ProjectPrn212Context();
+                return context.Users.FirstOrDefault(u => u.UserId == id);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
         public void UpdateUser(User user)
         {
             try

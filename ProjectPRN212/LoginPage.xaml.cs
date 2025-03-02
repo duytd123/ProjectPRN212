@@ -33,7 +33,7 @@ namespace ProjectPRN212
                 User user = _userObject.GetUserLogin(email, password);
                 if (user != null && user.Role.Equals("Citizen"))
                 {
-                    UserWindow userWindow = new UserWindow();
+                    UserWindow userWindow = new UserWindow(user.UserId);
                     userWindow.Show();
                     this.Close();
                 }

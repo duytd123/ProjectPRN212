@@ -27,7 +27,7 @@ public partial class Report
 
     public int? ProcessedBy { get; set; }
 
-    public virtual Vehicle PlateNumberNavigation { get; set; } = null!;
+    public virtual Vehicle? PlateNumberNavigation { get; set; } = null!;
 
     public virtual User? ProcessedByNavigation { get; set; }
 

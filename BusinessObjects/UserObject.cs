@@ -18,6 +18,7 @@ namespace BusinessObjects
             return user;
         }
         public User GetUserByEmail(string email) { return _userRepository.GetUserByEmail(email); }
+        public User GetUserById(int id) { return _userRepository.GetUserById(id); }
         public void UpdateUser(User user) { _userRepository.UpdateUser(user); }
         public void AddUser(User user) { _userRepository.AddUser(user); }
     }
