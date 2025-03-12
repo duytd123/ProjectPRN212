@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 namespace DataAccess.Models;
-
 public partial class Violation
 {
     public int ViolationId { get; set; }

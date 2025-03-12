@@ -1,0 +1,45 @@
+﻿<Window x:Class="ProjectPRN212.ReportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProjectPRN212"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="Báo cáo vi phạm giao thông" Height="500" Width="900">
+    <Grid>
+        <TextBlock Text="Báo cáo số lượng vi phạm theo khu vực và loại vi phạm"
+                   FontSize="16" FontWeight="Bold" Margin="10"/>
+
+        <!-- DataGrid hiển thị danh sách báo cáo vi phạm -->
+        <DataGrid x:Name="ReportGrid" Margin="10,40,10,150"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Mã Báo Cáo" Binding="{Binding ReportId}" Width="80"/>
+                <DataGridTextColumn Header="Khu vực" Binding="{Binding Location}" Width="200"/>
+                <DataGridTextColumn Header="Loại Vi Phạm" Binding="{Binding ViolationType}" Width="200"/>
+                <DataGridTextColumn Header="Trạng Thái" Binding="{Binding Status}" Width="120"/>
+                <DataGridTextColumn Header="Ngày Báo Cáo" Binding="{Binding ReportDate}" Width="150"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- GroupBox chứa thống kê số lượng báo cáo theo trạng thái -->
+        <GroupBox Header="Thống kê mức độ xử lý phản ánh" Margin="10,330,10,50">
+            <StackPanel>
+                <TextBlock x:Name="PendingCount" FontSize="14" FontWeight="Bold" Margin="5"/>
+                <TextBlock x:Name="ApprovedCount" FontSize="14" FontWeight="Bold" Margin="5"/>
+                <TextBlock x:Name="RejectedCount" FontSize="14" FontWeight="Bold" Margin="5"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Nút quay lại -->
+        <Button Content="Quay lại" HorizontalAlignment="Left"
+                VerticalAlignment="Bottom" Margin="10"
+                Click="btnBack_Click"/>
+        
+        <Button Content="Hiển thị biểu đồ" HorizontalAlignment="Right"
+        VerticalAlignment="Bottom" Margin="10"
+        Width="150" Click="btnShowChart_Click"/>
+    </Grid>
+</Window>
