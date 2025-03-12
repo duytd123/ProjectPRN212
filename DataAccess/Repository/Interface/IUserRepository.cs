@@ -8,5 +8,7 @@ namespace DataAccess.Repository.Interface
         public User GetUserByEmail(string email);
         public void UpdateUser(User user);
         public void AddUser(User user);
+        void LogUserActivity(int userId, string action);
+        List<KeyValuePair<DateTime, Tuple<int, string>>> GetLoginLogs();
     }
 }

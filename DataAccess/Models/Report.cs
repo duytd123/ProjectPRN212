@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccess.Models;
-
 public partial class Report
 {
     public int ReportId { get; set; }
@@ -27,6 +27,8 @@ public partial class Report
 
     public int? ProcessedBy { get; set; }
 
+    public string? RejectionReason { get; set; }
+
     public virtual Vehicle PlateNumberNavigation { get; set; } = null!;
 
     public virtual User? ProcessedByNavigation { get; set; }
@@ -34,4 +36,7 @@ public partial class Report
     public virtual User Reporter { get; set; } = null!;
 
     public virtual ICollection<Violation> Violations { get; set; } = new List<Violation>();
+
+    [NotMapped]
+    public bool NotificationSent { get; set; }
 }

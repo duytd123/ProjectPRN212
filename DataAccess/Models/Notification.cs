@@ -1,5 +1,7 @@
-﻿namespace DataAccess.Models;
+﻿using System;
+using System.Collections.Generic;
 
+namespace DataAccess.Models;
 public partial class Notification
 {
     public int NotificationId { get; set; }

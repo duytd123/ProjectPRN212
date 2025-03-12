@@ -51,7 +51,7 @@ namespace ProjectPRN212
             }
             catch(Exception ex)
             {
-
+                
             }
         }
         private string GenerateRandomPassword()

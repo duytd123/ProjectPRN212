@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Models;
-
 public partial class ProjectPrn212Context : DbContext
 {
     public ProjectPrn212Context()
@@ -13,11 +13,14 @@ public partial class ProjectPrn212Context : DbContext
     public ProjectPrn212Context(DbContextOptions<ProjectPrn212Context> options)
         : base(options)
     {
+
     }
 
     public virtual DbSet<Notification> Notifications { get; set; }
 
     public virtual DbSet<Report> Reports { get; set; }
+
+    public virtual DbSet<TrustedDevice> TrustedDevices { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -26,14 +29,16 @@ public partial class ProjectPrn212Context : DbContext
     public virtual DbSet<Violation> Violations { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("server =LAPTOP-247\\SQLSERVER2019; database=ProjectPRN212;uid=sa;pwd=123;TrustServerCertificate=True;");
+    {
+        var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnectionStringDB"));
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Notification>(entity =>
         {
-            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E3253414261");
+            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E32863712EF");
 
             entity.HasIndex(e => e.UserId, "idx_notification_user");
 
@@ -51,17 +56,17 @@ public partial class ProjectPrn212Context : DbContext
             entity.HasOne(d => d.PlateNumberNavigation).WithMany(p => p.Notifications)
                 .HasPrincipalKey(p => p.PlateNumber)
                 .HasForeignKey(d => d.PlateNumber)
-                .HasConstraintName("FK__Notificat__Plate__5CD6CB2B");
+                .HasConstraintName("FK__Notificat__Plate__7A672E12");
 
             entity.HasOne(d => d.User).WithMany(p => p.Notifications)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Notificat__UserI__5BE2A6F2");
+                .HasConstraintName("FK__Notificat__UserI__797309D9");
         });
 
         modelBuilder.Entity<Report>(entity =>
         {
-            entity.HasKey(e => e.ReportId).HasName("PK__Reports__D5BD48E56B4F8D6F");
+            entity.HasKey(e => e.ReportId).HasName("PK__Reports__D5BD48E5FF41F4D9");
 
             entity.HasIndex(e => e.PlateNumber, "idx_plate_number");
 
@@ -89,6 +94,9 @@ public partial class ProjectPrn212Context : DbContext
             entity.Property(e => e.VideoUrl)
                 .HasColumnType("text")
                 .HasColumnName("VideoURL");
+            entity.Property(e => e.RejectionReason)
+               .HasMaxLength(500)
+               .IsUnicode(false);
             entity.Property(e => e.ViolationType)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -97,22 +105,44 @@ public partial class ProjectPrn212Context : DbContext
                 .HasPrincipalKey(p => p.PlateNumber)
                 .HasForeignKey(d => d.PlateNumber)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Reports__PlateNu__5070F446");
+                .HasConstraintName("FK__Reports__PlateNu__5CD6CB2B");
 
             entity.HasOne(d => d.ProcessedByNavigation).WithMany(p => p.ReportProcessedByNavigations)
                 .HasForeignKey(d => d.ProcessedBy)
-                .HasConstraintName("FK__Reports__Process__4F7CD00D");
+                .HasConstraintName("FK__Reports__Process__5BE2A6F2");
 
             entity.HasOne(d => d.Reporter).WithMany(p => p.ReportReporters)
                 .HasForeignKey(d => d.ReporterId)
-                .HasConstraintName("FK__Reports__Reporte__4E88ABD4");
+                .HasConstraintName("FK__Reports__Reporte__5AEE82B9");
+        });
+
+        modelBuilder.Entity<TrustedDevice>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__TrustedD__3214EC27350CADE2");
+
+            entity.HasIndex(e => e.DeviceToken, "UQ__TrustedD__99E86CC7D759D6AE").IsUnique();
+
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("(newid())")
+                .HasColumnName("ID");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.DeviceToken)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TrustedDevices)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__TrustedDe__UserI__18EBB532");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC5D369CEC");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC79AFAACD");
 
-            entity.HasIndex(e => e.Email, "UQ__Users__A9D105346C0EF5A2").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Users__A9D105347E529954").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.Address).HasColumnType("text");
@@ -135,9 +165,9 @@ public partial class ProjectPrn212Context : DbContext
 
         modelBuilder.Entity<Vehicle>(entity =>
         {
-            entity.HasKey(e => e.VehicleId).HasName("PK__Vehicles__476B54B20D5730E2");
+            entity.HasKey(e => e.VehicleId).HasName("PK__Vehicles__476B54B288BBAEAF");
 
-            entity.HasIndex(e => e.PlateNumber, "UQ__Vehicles__036926249D90C14C").IsUnique();
+            entity.HasIndex(e => e.PlateNumber, "UQ__Vehicles__0369262459278C87").IsUnique();
 
             entity.Property(e => e.VehicleId).HasColumnName("VehicleID");
             entity.Property(e => e.Brand)
@@ -153,12 +183,12 @@ public partial class ProjectPrn212Context : DbContext
 
             entity.HasOne(d => d.Owner).WithMany(p => p.Vehicles)
                 .HasForeignKey(d => d.OwnerId)
-                .HasConstraintName("FK__Vehicles__OwnerI__48CFD27E");
+                .HasConstraintName("FK__Vehicles__OwnerI__3D5E1FD2");
         });
 
         modelBuilder.Entity<Violation>(entity =>
         {
-            entity.HasKey(e => e.ViolationId).HasName("PK__Violatio__18B6DC2862554023");
+            entity.HasKey(e => e.ViolationId).HasName("PK__Violatio__18B6DC2860BA0C3C");
 
             entity.Property(e => e.ViolationId).HasColumnName("ViolationID");
             entity.Property(e => e.FineAmount).HasColumnType("decimal(10, 2)");
@@ -176,16 +206,16 @@ public partial class ProjectPrn212Context : DbContext
                 .HasPrincipalKey(p => p.PlateNumber)
                 .HasForeignKey(d => d.PlateNumber)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Violation__Plate__5629CD9C");
+                .HasConstraintName("FK__Violation__Plate__6E01572D");
 
             entity.HasOne(d => d.Report).WithMany(p => p.Violations)
                 .HasForeignKey(d => d.ReportId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Violation__Repor__5535A963");
+                .HasConstraintName("FK__Violation__Repor__6D0D32F4");
 
             entity.HasOne(d => d.Violator).WithMany(p => p.Violations)
                 .HasForeignKey(d => d.ViolatorId)
-                .HasConstraintName("FK__Violation__Viola__571DF1D5");
+                .HasConstraintName("FK__Violation__Viola__6EF57B66");
         });
 
         OnModelCreatingPartial(modelBuilder);

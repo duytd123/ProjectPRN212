@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 namespace DataAccess.Models;
-
 public partial class User
 {
     public int UserId { get; set; }
@@ -19,11 +18,15 @@ public partial class User
 
     public string? Address { get; set; }
 
+    public bool? IsDisabled { get; set; }
+
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
     public virtual ICollection<Report> ReportProcessedByNavigations { get; set; } = new List<Report>();
 
     public virtual ICollection<Report> ReportReporters { get; set; } = new List<Report>();
+
+    public virtual ICollection<TrustedDevice> TrustedDevices { get; set; } = new List<TrustedDevice>();
 
     public virtual ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
 

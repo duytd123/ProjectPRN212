@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjectPRN212"
         mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
         Title="UserWindow" Height="450" Width="800">
     <Grid>
-        
+        <Button Name="btnLogout" Content="Logout" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" Margin="10" Click="btnLogout_Click"/>
     </Grid>
 </Window>

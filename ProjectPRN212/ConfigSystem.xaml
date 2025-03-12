@@ -1,0 +1,34 @@
+﻿<Window x:Class="ProjectPRN212.ConfigSystem"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProjectPRN212"
+        mc:Ignorable="d"
+        Title="ConfigSystem" Height="450" Width="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="Session Timeout:" Grid.Row="0" Grid.Column="0" Margin="5"/>
+        <TextBox Name="txtSessionTimeout" Grid.Row="0" Grid.Column="1" Margin="5"/>
+
+        <CheckBox Name="chkEnableLogging" Content="Enable Logging" Grid.Row="2" Grid.Column="0" Margin="5"/>
+        <CheckBox Name="chkEnableTwoFactorAuth" Content="Enable Two-Factor Authentication" Grid.Row="2" Grid.Column="1" Margin="5"/>
+        <CheckBox Name="chkEnableAutoLogout" Content="Enable Auto Logout" Grid.Row="3" Grid.Column="0" Margin="5"/>
+
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <Button Name="btnSaveSettings" Content="Save Settings" Width="150" Margin="5" Click="btnSaveSettings_Click"/>
+            <Button Name="btnBackToAdmin" Content="Back to Admin" Width="150" Margin="5" Click="btnBackToAdmin_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
+

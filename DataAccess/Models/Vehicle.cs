@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 namespace DataAccess.Models;
-
 public partial class Vehicle
 {
     public int VehicleId { get; set; }
