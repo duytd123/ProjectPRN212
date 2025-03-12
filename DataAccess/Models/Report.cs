@@ -31,6 +31,7 @@ public partial class Report
 
     public virtual Vehicle PlateNumberNavigation { get; set; } = null!;
 
+
     public virtual User? ProcessedByNavigation { get; set; }
 
     public virtual User Reporter { get; set; } = null!;
