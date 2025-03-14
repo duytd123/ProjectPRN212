@@ -1,0 +1,60 @@
+﻿<Window x:Class="ProjectPRN212.ProfileWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Profile" Height="450" Width="700"
+        WindowStartupLocation="CenterScreen" Background="#F4F4F4">
+    <Grid>
+        <Border Width="750" Height="400" Background="White" CornerRadius="10"
+                HorizontalAlignment="Center" VerticalAlignment="Center" Padding="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Hình ảnh người dùng -->
+                <Image Source="Assets/user.png" Width="150" Height="150" Margin="39,10,521,200" Grid.Column="0" Grid.ColumnSpan="2"/>
+
+                <!-- Thông tin người dùng -->
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.Column="1">
+                    <TextBlock Text="Thông Tin Cá Nhân" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,10">
+                        <TextBlock Text="Họ và Tên:" Width="150" FontSize="16"/>
+                        <TextBlock x:Name="txtFullName" FontSize="16"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,10">
+                        <TextBlock Text="Email:" Width="150" FontSize="16"/>
+                        <TextBlock x:Name="txtEmail" FontSize="16"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,10">
+                        <TextBlock Text="Mật Khẩu:" Width="150" FontSize="16"/>
+                        <TextBlock x:Name="txtPassword" FontSize="16"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,10">
+                        <TextBlock Text="Vai Trò:" Width="150" FontSize="16"/>
+                        <TextBlock x:Name="txtRole" FontSize="16"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,10">
+                        <TextBlock Text="Số Điện Thoại:" Width="150" FontSize="16"/>
+                        <TextBlock x:Name="txtPhone" FontSize="16"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,10">
+                        <TextBlock Text="Địa Chỉ:" Width="150" FontSize="16"/>
+                        <TextBlock x:Name="txtAddress" FontSize="16"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,10">
+                        <TextBlock Text="Số Phương Tiện:" Width="150" FontSize="16"/>
+                        <TextBlock x:Name="txtVehicleCount" FontSize="16"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

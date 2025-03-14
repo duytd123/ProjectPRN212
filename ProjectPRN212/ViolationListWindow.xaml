@@ -1,0 +1,35 @@
+﻿<Window x:Class="ProjectPRN212.ViolationListWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Danh Sách Vi Phạm" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen" Background="#F4F4F4">
+    <Grid>
+        <Border Width="750" Height="434" Background="White" CornerRadius="10"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                Padding="20">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="750" Margin="0,-20,0,0">
+                <!-- Tiêu đề -->
+                <TextBlock Text="Danh Sách Vi Phạm" FontSize="24" FontWeight="Bold"
+                           Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+                <!-- Danh sách vi phạm -->
+                <ListView x:Name="ViolationListView" Width="750" Height="300">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Biển Số Xe" DisplayMemberBinding="{Binding PlateNumber}" Width="150"/>
+                            <GridViewColumn Header="Loại Vi Phạm" DisplayMemberBinding="{Binding ViolationType}" Width="150"/>
+                            <GridViewColumn Header="Ngày Vi Phạm" DisplayMemberBinding="{Binding ReportDate, StringFormat={}{0:dd/MM/yyyy}}" Width="150"/>
+                            <GridViewColumn Header="Số Tiền Phạt" DisplayMemberBinding="{Binding FineAmount, StringFormat={}{0:C}}" Width="150"/>
+                            <GridViewColumn Header="Trạng Thái" DisplayMemberBinding="{Binding Status}" Width="150"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
+                <!-- Nút Xem Chi Tiết -->
+                <Button x:Name="ViewDetailsButton" Content="Xem Chi Tiết" Width="150" Height="40"
+                        Background="#007ACC" Foreground="White" FontSize="16" Margin="0,20,0,0"
+                        Click="ViewDetailsButton_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

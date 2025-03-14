@@ -9,6 +9,7 @@ namespace ProjectPRN212
         private readonly int currentUserId;
         private readonly UserObject _userObjects;
         private readonly ReportObjects _reportObjects;
+        private NotifyObject _notifyObjects;
         private User _currentUser;
 
         public UserWindow(int userId)
@@ -17,6 +18,7 @@ namespace ProjectPRN212
             currentUserId = userId;
             _userObjects = new UserObject();
             _reportObjects = new ReportObjects();
+            _notifyObjects = new NotifyObject();
             LoadCurrentUser();
         }
 
@@ -62,7 +64,8 @@ namespace ProjectPRN212
 
         private void ViewViolationDetails_Click(object sender, RoutedEventArgs e)
         {
-
+            var viewViolation = new ViolationListWindow(currentUserId);
+            viewViolation.ShowDialog();
         }
 
         private void PayFineOnline_Click(object sender, RoutedEventArgs e)
@@ -81,9 +84,43 @@ namespace ProjectPRN212
 
         private void ProfileButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (_currentUser != null)
+            {
+                var profileWindow = new ProfileWindow(_currentUser);
+                profileWindow.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Không thể tải thông tin người dùng!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
-
+        private void NotificationButton_Click(object sender, RoutedEventArgs e)
+        {
+            var notifications = _notifyObjects.GetNotificationsByUserId(currentUserId);
+            var notificationWindow = new NotificationWindow(notifications);
+            notificationWindow.Closed += (s, args) => { UpdateNotificationBadge(); };
+            notificationWindow.ShowDialog();
+        }
+        private void UpdateNotificationBadge()
+        {
+            try
+            {
+                var unreadCount = _notifyObjects.GetUnreadNotificationsByUserId(currentUserId).Count;
+                if (unreadCount > 0)
+                {
+                    NotificationBadge.Visibility = Visibility.Visible;
+                    NotificationCount.Text = unreadCount.ToString();
+                }
+                else
+                {
+                    NotificationBadge.Visibility = Visibility.Collapsed;
+                }
+            }
+            catch
+            {
+                NotificationBadge.Visibility = Visibility.Collapsed;
+            }
+        }
     }
 }

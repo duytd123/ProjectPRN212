@@ -19,6 +19,8 @@ public partial class User
 
     public string? Address { get; set; }
 
+    public decimal Balance { get; set; } = 100000.00m;
+
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
     public virtual ICollection<Report> ReportProcessedByNavigations { get; set; } = new List<Report>();

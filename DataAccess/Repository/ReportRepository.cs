@@ -13,6 +13,11 @@ namespace DataAccess.Repository
             _context = context;
         }
 
+        public async Task<Report> GetReportById(int reportId)
+        {
+            return await _context.Reports.Include(r => r.Reporter).FirstOrDefaultAsync(r => r.ReportId == reportId);
+        }
+
         public async Task<bool> AddReport(Report report)
         {
             try
@@ -34,6 +39,54 @@ namespace DataAccess.Repository
                 Console.WriteLine($"Error details: {e.InnerException?.Message ?? e.Message}");
                 throw;
             }
+        }
+
+        public async Task<IEnumerable<Violation>> GetViolationsByUserId(int userId)
+        {
+            return await _context.Violations
+                .Include(v => v.Report)
+                .Where(v => v.ViolatorId == userId)
+                .ToListAsync();
+        }
+
+        public async Task<bool> ApproveReport(int reportId, int processedBy)
+        {
+            var report = await _context.Reports.FindAsync(reportId);
+            if (report != null && report.Status == "Pending")
+            {
+                report.Status = "Approved";
+                report.ProcessedBy = processedBy;
+                await _context.SaveChangesAsync();
+
+                // Gửi thông báo cho người vi phạm
+                var violator = await _context.Users.FirstOrDefaultAsync(u => u.Vehicles.Any(v => v.PlateNumber == report.PlateNumber));
+                if (violator != null)
+                {
+                    var notification = new Notification
+                    {
+                        UserId = violator.UserId,
+                        Message = $"Bạn đã nhận được phản ánh vi phạm với biển số {report.PlateNumber}.",
+                        PlateNumber = report.PlateNumber,
+                        SentDate = DateTime.Now
+                    };
+                    _context.Notifications.Add(notification);
+                    await _context.SaveChangesAsync();
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> PayFine(int violationId)
+        {
+            var violation = await _context.Violations.FindAsync(violationId);
+            if (violation != null)
+            {
+                violation.PaidStatus = true;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
 
         public IEnumerable<Report> GetReportsByUserIdAndFilters(int userId, DateOnly? fromDate, DateOnly? toDate, string? status, string? violationType, string? plateNumber)
