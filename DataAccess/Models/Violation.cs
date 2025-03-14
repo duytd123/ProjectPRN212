@@ -19,10 +19,6 @@ public partial class Violation
 
     public bool? PaidStatus { get; set; }
 
-    public string? Response { get; set; }
-
-    public int ResponseCount { get; set; }
-
     public virtual Vehicle PlateNumberNavigation { get; set; } = null!;
 
     public virtual Report Report { get; set; } = null!;

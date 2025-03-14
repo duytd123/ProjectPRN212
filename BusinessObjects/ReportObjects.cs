@@ -15,29 +15,9 @@ namespace BusinessObjects
             _reportRepository = new ReportRepository(_context);
         }
 
-        public async Task<Report> GetReportById(int reportId)
+        public Task<bool> AddReport(Report report)
         {
-            return await _reportRepository.GetReportById(reportId);
-        }
-
-        public async Task<bool> AddReport(Report report)
-        {
-            return await _reportRepository.AddReport(report);
-        }
-
-        public async Task<bool> ApproveReport(int reportId, int processedBy)
-        {
-            return await _reportRepository.ApproveReport(reportId, processedBy);
-        }
-
-        public async Task<IEnumerable<Violation>> GetViolationsByUserId(int userId)
-        {
-            return await _reportRepository.GetViolationsByUserId(userId);
-        }
-
-        public async Task<bool> PayFine(int violationId)
-        {
-            return await _reportRepository.PayFine(violationId);
+            return _reportRepository.AddReport(report);
         }
 
         public IEnumerable<Report> GetReportsByUserIdAndFilters(int userId, DateOnly? fromDate, DateOnly? toDate, string? status, string? violationType, string? plateNumber)

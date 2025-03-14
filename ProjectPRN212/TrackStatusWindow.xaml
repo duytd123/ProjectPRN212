@@ -93,9 +93,9 @@
                             <TextBlock Grid.Column="4" Text="Trạng thái:" VerticalAlignment="Center" Margin="5" FontWeight="Bold"/>
                             <ComboBox Grid.Column="5" Name="cbStatus">
                                 <ComboBoxItem Content="Tất cả"/>
-                                <ComboBoxItem Content="Đang xử lý"/>
-                                <ComboBoxItem Content="Đã duyệt"/>
-                                <ComboBoxItem Content="Từ chối"/>
+                                <ComboBoxItem Content="Pending"/>
+                                <ComboBoxItem Content="Approved"/>
+                                <ComboBoxItem Content="Rejected"/>
                             </ComboBox>
                         </Grid>
 
