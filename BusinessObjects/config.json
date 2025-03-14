@@ -1,0 +1,7 @@
+{
+  "SessionTimeout": 1,
+  "EnableLogging": false,
+  "EnableTwoFactorAuth": false,
+  "EnableAutoLogout": true
+}
+

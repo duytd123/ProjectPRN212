@@ -21,5 +21,14 @@ namespace BusinessObjects
         public User GetUserById(int id) { return _userRepository.GetUserById(id); }
         public void UpdateUser(User user) { _userRepository.UpdateUser(user); }
         public void AddUser(User user) { _userRepository.AddUser(user); }
+        public void LogUserActivity(int userId, string action)
+        {
+            _userRepository.LogUserActivity(userId, action);
+        }
+        public List<KeyValuePair<DateTime, Tuple<int, string>>> GetLoginLogs()
+        {
+            return _userRepository.GetLoginLogs();
+        }
+
     }
 }
