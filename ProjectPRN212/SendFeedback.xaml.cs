@@ -80,7 +80,8 @@ namespace ProjectPRN212
                     VideoUrl = videoUrl,
                     Location = txtLocation.Text,
                     ReportDate = DateTime.Now,
-                    Status = "Pending"
+                    Status = "Pending",
+                    ProcessedBy = _currentUserId
                 };
                 bool result = await _reportObjects.AddReport(report);
                 if (result)
@@ -96,11 +97,7 @@ namespace ProjectPRN212
                 catch (Exception ex)
             {
                 var errorMessage = ex.InnerException?.Message ?? ex.Message;
-                MessageBox.Show($"Đã xảy ra lỗi: {errorMessage}",
-                    "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-
-                // Log lỗi
-                Console.WriteLine($"Exception details: {ex}");
+                MessageBox.Show($"Đã xảy ra lỗi: {errorMessage}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

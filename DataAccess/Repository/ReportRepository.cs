@@ -23,6 +23,7 @@ namespace DataAccess.Repository
                 {
                     throw new Exception($"UserID {report.ReporterId} không tồn tại.");
                 }
+                report.ProcessedBy = report.ReporterId;
                 _context.Add(report);
                 await _context.SaveChangesAsync();
                 return true;
