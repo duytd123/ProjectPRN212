@@ -12,12 +12,11 @@ namespace ProjectPRN212
         private NotifyObject _notifyObject;
         private int _policeUserId;
 
-        public PoliceNotification(Report report, PoliceObject policeObject, int policeUserId)
+        public PoliceNotification(Report report, PoliceObject policeObject)
         {
             InitializeComponent();
             _selectedReport = report;
             _policeObject = policeObject;
-            _policeUserId = policeUserId;
             _notifyObject = new NotifyObject();
             LoadReportDetails();
         }
@@ -54,8 +53,8 @@ namespace ProjectPRN212
             }
 
             string message = NotificationMessageTextBox.Text;
-            var violator = _policeObject.GetUserByPlateNumber(_selectedReport.PlateNumber);
-            if (violator == null)
+            var user = _policeObject.GetUserByPlateNumber(_selectedReport.PlateNumber);
+            if (user == null)
             {
                 MessageBox.Show("Không tìm thấy thông tin người vi phạm.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -63,6 +62,7 @@ namespace ProjectPRN212
 
             decimal? fineAmount = null;
             DateTime? dueDate = null;
+
             if (NotificationTypeComboBox.SelectedIndex == 1)
             {
                 if (!decimal.TryParse(FineAmountTextBox.Text, out decimal fine) || fine <= 0)
@@ -70,33 +70,32 @@ namespace ProjectPRN212
                     MessageBox.Show("Số tiền phạt không hợp lệ.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
+
                 if (DueDatePicker.SelectedDate == null)
                 {
                     MessageBox.Show("Vui lòng chọn ngày hạn nộp phạt.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
+
                 fineAmount = fine;
                 dueDate = DueDatePicker.SelectedDate;
             }
 
-            try
-            {
                 _policeObject.VerifyAndProcessReport(_selectedReport.ReportId, "Approved", _policeUserId);
 
                 string violaterMessage = $"Xe biển số {_selectedReport.PlateNumber} đã bị phản ánh.";
-                _policeObject.NotifyViolator(violator.UserId, violaterMessage, _selectedReport.PlateNumber, fineAmount, dueDate);
+                //_policeObject.NotifyViolator(violator.UserId, violaterMessage, _selectedReport.PlateNumber, fineAmount, dueDate);
 
                 string reporterMessage = $"Đơn phản ánh của bạn về xe biển số {_selectedReport.PlateNumber} đã được duyệt.";
                 _notifyObject.AddNotification(_selectedReport.ReporterId, reporterMessage, _selectedReport.PlateNumber);
 
                 MessageBox.Show("Xử lý báo cáo và gửi thông báo thành công.", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi khi xử lý: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+
+            MessageBox.Show("Gửi thông báo thành công.", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+            this.Close();
         }
+
 
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
