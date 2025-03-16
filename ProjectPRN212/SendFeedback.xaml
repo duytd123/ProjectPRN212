@@ -1,0 +1,108 @@
+﻿<Window x:Class="ProjectPRN212.SendFeedback"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Send Feedback" Height="500" Width="600" WindowStartupLocation="CenterScreen"
+        Background="White">
+    <Window.Resources>
+        <!-- Style for TextBox -->
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderBrush" Value="#0078D7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Height" Value="35"/>
+        </Style>
+
+        <!-- Style for ComboBox -->
+        <Style TargetType="ComboBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderBrush" Value="#0078D7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Height" Value="35"/>
+        </Style>
+
+        <!-- Style for Button -->
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#0078D7"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#005a9e"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#003f7f"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Border Background="White" Padding="10" CornerRadius="10" BorderBrush="#0078D7" BorderThickness="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Violation Type -->
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Loại vi phạm:" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Margin="5"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" Name="cbViolationType">
+                    <ComboBoxItem Content="Lấn làn"/>
+                    <ComboBoxItem Content="Vượt đèn đỏ"/>
+                    <ComboBoxItem Content="Đi sai làn đường"/>
+                    <ComboBoxItem Content="Không đội mũ bảo hiểm"/>
+                </ComboBox>
+
+                <!-- Description -->
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Mô tả:" VerticalAlignment="Top" FontSize="14" FontWeight="Bold" Margin="5"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Name="txtDescription" Height="80" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+                <!-- Plate Number -->
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Biển số xe:" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Margin="5"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Name="txtPlateNumber"/>
+
+                <!-- Image Upload -->
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Ảnh bằng chứng:" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Margin="5"/>
+                <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+                    <Button Name="btnUploadImage" Content="Tải lên"/>
+                    <TextBlock Name="txtImageName" VerticalAlignment="Center" Margin="5"/>
+                </StackPanel>
+
+                <!-- Video Upload -->
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Video bằng chứng:" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Margin="5"/>
+                <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
+                    <Button Name="btnUploadVideo" Content="Tải lên"/>
+                    <TextBlock Name="txtVideoName" VerticalAlignment="Center" Margin="5"/>
+                </StackPanel>
+
+                <!-- Location -->
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="Địa điểm:" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Margin="5"/>
+                <TextBox Grid.Row="5" Grid.Column="1" Name="txtLocation" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+                <!-- Submit Button -->
+                <Button Grid.Row="7" Grid.Column="1" Content="Gửi phản ánh" Name="btnSubmit" HorizontalAlignment="Right"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

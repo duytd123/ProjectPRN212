@@ -55,6 +55,7 @@ namespace ProjectPRN212
                 {
                     MessageBox.Show("Tài khoản của bạn đã bị vô hiệu hóa! Vui lòng liên hệ cảnh sát để kích hoạt lại.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
+
                 }
 
                 var configJson = File.ReadAllText("config.json");

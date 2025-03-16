@@ -6,6 +6,7 @@ namespace DataAccess.Repository.Interface
     {
         public User GetUserLogin(string email, string password);
         public User GetUserByEmail(string email);
+        public User GetUserById(int id);
         public void UpdateUser(User user);
         public void AddUser(User user);
         void LogUserActivity(int userId, string action);
