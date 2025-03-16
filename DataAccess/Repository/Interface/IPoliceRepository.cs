@@ -16,5 +16,7 @@ namespace DataAccess.Repository.Interface
         User? GetUserByPlateNumber(string plateNumber);
         bool HasNotificationBeenSent(int reportId);
         Violation? GetViolationByReportId(int reportId);
+
+        bool DoesVehicleExist(string plateNumber);
     }
 }

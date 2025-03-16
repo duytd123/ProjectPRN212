@@ -111,6 +111,12 @@ namespace DataAccess.Repository
                            .FirstOrDefault(v => v.ReportId == reportId);
         }
 
+        public bool DoesVehicleExist(string plateNumber)
+        {
+            return _context.Vehicles.Any(v => v.PlateNumber == plateNumber);
+        }
+
+
     }
 }
 
