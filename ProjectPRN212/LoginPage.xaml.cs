@@ -126,10 +126,23 @@ namespace ProjectPRN212
 
         private void OpenUserWindow(User user)
         {
+            if (user.Role == "TrafficPolice")
+            {
+                int? policeUserId = _policeRepository.GetPoliceUserId(user.Email);
+                if (policeUserId == null)
+                {
+                    MessageBox.Show("Không thể xác định ID của cảnh sát.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                PoliceWindow policeWindow = new PoliceWindow(_policeObject, policeUserId.Value);
+                policeWindow.Show();
+                this.Close();
+                return;
+            }
             var roleWindows = new Dictionary<string, Func<Window>>
     {
         { "Citizen", () => new UserWindow(user.UserId) },
-        { "TrafficPolice", () => new PoliceWindow(_policeObject) },
         { "Admin", () => new AdminWindow() }
     };
 

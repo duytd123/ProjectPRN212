@@ -16,10 +16,12 @@ namespace ProjectPRN212
         private List<Report> AllReports;
         private DispatcherTimer _sessionTimer;
         private readonly AdminObject _adminObject;
-        public PoliceWindow(PoliceObject policeObject)
+        private int _policeUserId;
+        public PoliceWindow(PoliceObject policeObject, int policeUserId)
         {
             InitializeComponent();
             _policeObject = policeObject;
+            _policeUserId = policeUserId;
             LoadReports();
 
             _adminObject = new AdminObject(new DataAccess.Repository.AdminRepository(new DataAccess.Models.ProjectPrn212Context()));
@@ -61,7 +63,7 @@ namespace ProjectPRN212
                     return;
                 }
 
-                Verification verificationWindow = new Verification(selectedReport, _policeObject);
+                Verification verificationWindow = new Verification(selectedReport, _policeObject,_policeUserId);
                 verificationWindow.Show();
                 this.Close();
             }
@@ -85,8 +87,7 @@ namespace ProjectPRN212
                     MessageBox.Show("Thông báo đã được gửi cho biên bản này.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-
-                PoliceNotification policeNotification = new PoliceNotification(selectedReport, _policeObject);
+                PoliceNotification policeNotification = new PoliceNotification(selectedReport, _policeObject, _policeUserId);
                 policeNotification.Show();
                 this.Close();
             }
@@ -172,7 +173,7 @@ namespace ProjectPRN212
 
         private void btnReport_Click(object sender, RoutedEventArgs e)
         {
-            ReportWindow reportWindow = new ReportWindow(_policeObject);
+            ReportWindow reportWindow = new ReportWindow(_policeObject, _policeUserId);
             reportWindow.Show();
             this.Close();
         }
