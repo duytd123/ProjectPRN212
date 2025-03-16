@@ -35,9 +35,9 @@
 
         <!-- Nút quay lại -->
         <Button Content="Quay lại" HorizontalAlignment="Left"
-                VerticalAlignment="Bottom" Margin="10"
+                VerticalAlignment="Top" Margin="10,454,0,0"
                 Click="btnBack_Click"/>
-        
+
         <Button Content="Hiển thị biểu đồ" HorizontalAlignment="Right"
         VerticalAlignment="Bottom" Margin="10"
         Width="150" Click="btnShowChart_Click"/>

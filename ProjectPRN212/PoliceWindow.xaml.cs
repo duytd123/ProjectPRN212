@@ -172,7 +172,7 @@ namespace ProjectPRN212
 
         private void btnReport_Click(object sender, RoutedEventArgs e)
         {
-            ReportWindow reportWindow = new ReportWindow();
+            ReportWindow reportWindow = new ReportWindow(_policeObject);
             reportWindow.Show();
             this.Close();
         }
