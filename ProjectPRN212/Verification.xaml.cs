@@ -83,6 +83,26 @@ namespace ProjectPRN212
         {
             try
             {
+
+                if (!IsPlateNumberValid(_selectedReport.PlateNumber))
+                {
+                    string rejectionReason = "Không tìm thấy biển số phù hợp.";
+
+                    _selectedReport.Status = "Rejected";
+                    _selectedReport.RejectionReason = rejectionReason;
+
+                    _policeObject.VerifyAndProcessReport(_selectedReport.ReportId, "Rejected", _selectedReport.ProcessedBy ?? 0, rejectionReason);
+
+                    StatusTextBlock.Text = "REJECTED";
+                    StatusTextBlock.Foreground = Brushes.Red;
+                    RejectionReasonTextBlock.Text = $"Lý do: {rejectionReason}";
+                    RejectionReasonTextBlock.Visibility = Visibility.Visible;
+
+                    MessageBox.Show($"Báo cáo đã bị từ chối do không tìm thấy biển số phù hợp!",
+                        "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
                 _policeObject.VerifyAndProcessReport(_selectedReport.ReportId, status, _selectedReport.ProcessedBy ?? 0);
                 MessageBox.Show($"Báo cáo đã được {status}!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
 
@@ -103,6 +123,10 @@ namespace ProjectPRN212
             }
         }
 
+        private bool IsPlateNumberValid(string plateNumber)
+        {
+            return _policeObject.DoesVehicleExist(plateNumber);
+        }
 
         private void ApproveButton_Click(object sender, RoutedEventArgs e)
         {
@@ -139,8 +163,6 @@ namespace ProjectPRN212
 
                     MessageBox.Show("Báo cáo đã bị từ chối!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
 
-
-                    // Cập nhật UI
                     StatusTextBlock.Text = "REJECTED";
                     StatusTextBlock.Foreground = Brushes.Red;
                     RejectionReasonTextBlock.Text = $"reson:  {reason}";

@@ -52,6 +52,10 @@ namespace BusinessObjects
         {
             return _policeRepository.GetViolationByReportId(reportId);
         }
+        public bool DoesVehicleExist(string plateNumber)
+        {
+            return _policeRepository.DoesVehicleExist(plateNumber);
+        }
 
 
     }
