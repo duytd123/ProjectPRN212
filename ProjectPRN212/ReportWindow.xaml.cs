@@ -13,6 +13,7 @@ namespace ProjectPRN212
     {
         private readonly ViolationObject _violationObject;
         private PoliceObject _policeObject;
+        
         public ReportWindow(PoliceObject policeObject)
         {
             InitializeComponent();
@@ -40,18 +41,18 @@ namespace ProjectPRN212
             RejectedCount.Text = $"Bị từ chối: {statistics.GetValueOrDefault("Rejected", 0)}";
         }
 
-        private void btnBack_Click(object sender, RoutedEventArgs e)
-        {
-            PoliceWindow policeWindow = new PoliceWindow(_policeObject);
-            policeWindow.Show();
-            this.Close();
-        }
-
         private void btnShowChart_Click(object sender, RoutedEventArgs e)
         {
             Dictionary<string, int> statistics = _violationObject.GetReportStatistics();
             ReportChartWindow chartWindow = new ReportChartWindow(statistics);
             chartWindow.ShowDialog();
+        }
+
+        private void btnBack_Click(object sender, RoutedEventArgs e)
+        {
+            PoliceWindow policeWindow = new PoliceWindow(_policeObject);
+            policeWindow.Show();
+            this.Close();
         }
     }
 }
