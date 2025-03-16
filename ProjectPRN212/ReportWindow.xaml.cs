@@ -13,13 +13,15 @@ namespace ProjectPRN212
     {
         private readonly ViolationObject _violationObject;
         private PoliceObject _policeObject;
-        public ReportWindow(PoliceObject policeObject)
+        private int _policeUserId;
+        public ReportWindow(PoliceObject policeObject, int policeUserId)
         {
             InitializeComponent();
 
             IViolationRepository violationRepository = new ViolationRepository(new ProjectPrn212Context());
             _violationObject = new ViolationObject(violationRepository);
             _policeObject = policeObject;
+            _policeUserId = policeUserId;
             LoadReportData();
             LoadReportStatistics();
 
@@ -40,18 +42,18 @@ namespace ProjectPRN212
             RejectedCount.Text = $"Bị từ chối: {statistics.GetValueOrDefault("Rejected", 0)}";
         }
 
-        private void btnBack_Click(object sender, RoutedEventArgs e)
-        {
-            PoliceWindow policeWindow = new PoliceWindow(_policeObject);
-            policeWindow.Show();
-            this.Close();
-        }
-
         private void btnShowChart_Click(object sender, RoutedEventArgs e)
         {
             Dictionary<string, int> statistics = _violationObject.GetReportStatistics();
             ReportChartWindow chartWindow = new ReportChartWindow(statistics);
             chartWindow.ShowDialog();
+        }
+
+        private void btnBack_Click(object sender, RoutedEventArgs e)
+        {
+            PoliceWindow policeWindow = new PoliceWindow(_policeObject,_policeUserId);
+            policeWindow.Show();
+            this.Close();
         }
     }
 }

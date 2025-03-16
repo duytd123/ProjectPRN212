@@ -27,6 +27,13 @@ namespace DataAccess.Repository
                 .ToList();
         }
 
+        public int? GetPoliceUserId(string email)
+        {
+            return _context.Users
+                           .Where(u => u.Email == email && u.Role == "TrafficPolice")
+                           .Select(u => u.UserId)
+                           .FirstOrDefault();
+        }
         public void UpdateReportStatus(int reportId, string status, int processedBy)
         {
             var validStatuses = new List<string> { "Pending", "Approved", "Rejected" };
@@ -109,6 +116,11 @@ namespace DataAccess.Repository
             return _context.Violations
                            .Include(v => v.Report) 
                            .FirstOrDefault(v => v.ReportId == reportId);
+        }
+
+        public bool DoesVehicleExist(string plateNumber)
+        {
+            return _context.Vehicles.Any(v => v.PlateNumber == plateNumber);
         }
 
     }

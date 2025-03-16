@@ -12,12 +12,13 @@ namespace ProjectPRN212
         private NotifyObject _notifyObject;
         private int _policeUserId;
 
-        public PoliceNotification(Report report, PoliceObject policeObject)
+        public PoliceNotification(Report report, PoliceObject policeObject, int policeUserId)
         {
             InitializeComponent();
             _selectedReport = report;
             _policeObject = policeObject;
             _notifyObject = new NotifyObject();
+            _policeUserId = policeUserId;
             LoadReportDetails();
         }
 
@@ -28,19 +29,32 @@ namespace ProjectPRN212
 
             var violator = _policeObject.GetUserByPlateNumber(_selectedReport.PlateNumber);
             ViolatorNameTextBlock.Text = violator?.FullName ?? "Unknown";
+
+            var violation = _policeObject.GetViolationByReportId(_selectedReport.ReportId);
+            if (violation != null)
+            {
+                FineAmountTextBox.Text = violation.FineAmount.ToString();
+            }
         }
 
         private void NotificationTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (NotificationTypeComboBox.SelectedIndex == 1)
+            bool isFineNotification = NotificationTypeComboBox.SelectedIndex == 1;
+            FineAmountTextBox.IsEnabled = isFineNotification;
+            DueDatePicker.IsEnabled = isFineNotification;
+
+            if (isFineNotification)
             {
-                FineAmountTextBox.IsEnabled = true;
-                DueDatePicker.IsEnabled = true;
+                var violation = _policeObject.GetViolationByReportId(_selectedReport.ReportId);
+                if (violation != null)
+                {
+                    FineAmountTextBox.Text = violation.FineAmount.ToString();
+                }
             }
             else
             {
-                FineAmountTextBox.IsEnabled = false;
-                DueDatePicker.IsEnabled = false;
+                FineAmountTextBox.Text = string.Empty;
+                DueDatePicker.SelectedDate = null;
             }
         }
 
@@ -100,7 +114,7 @@ namespace ProjectPRN212
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            PoliceWindow policeWindow = new PoliceWindow(_policeObject);
+            PoliceWindow policeWindow = new PoliceWindow(_policeObject,_policeUserId);
             policeWindow.Show();
             this.Close();
         }
