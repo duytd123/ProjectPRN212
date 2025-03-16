@@ -17,23 +17,28 @@ namespace DataAccess.Repository
         {
             try
             {
-                var context = new ProjectPrn212Context();
-                var userExists = await context.Users.AnyAsync(u => u.UserId == report.ReporterId);
+                var userExists = await _context.Users.AnyAsync(u => u.UserId == report.ReporterId);
 
                 if (!userExists)
                 {
                     throw new Exception($"UserID {report.ReporterId} không tồn tại.");
                 }
-                context.Add(report);
-                await context.SaveChangesAsync();
+                _context.Add(report);
+                await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception e)
             {
-                // Log lỗi chi tiết
                 Console.WriteLine($"Error details: {e.InnerException?.Message ?? e.Message}");
                 throw;
             }
+        }
+
+        public Report GetReportByPlateNumber(string plateNumber)
+        {
+            return _context.Reports
+                .Include(r => r.Violations)
+                .FirstOrDefault(r => r.PlateNumber == plateNumber);
         }
 
         public IEnumerable<Report> GetReportsByUserIdAndFilters(int userId, DateOnly? fromDate, DateOnly? toDate, string? status, string? violationType, string? plateNumber)

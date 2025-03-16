@@ -1,0 +1,76 @@
+﻿<Window x:Class="ProjectPRN212.ProfileWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProjectPRN212"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+        Title="ProfileWindow" Height="450" Width="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Avatar -->
+        <Border Grid.Column="0" Width="200">
+            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,30,0,0">
+                <Image x:Name="imgAvatar" Source="/Assets/user.png" Width="150" Height="150" Margin="10"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Right Side: User Information -->
+        <Grid Grid.Column="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Full Name -->
+            <Label Content="Full Name:" Grid.Row="0" Grid.Column="0" Margin="10"/>
+            <TextBox x:Name="txtFullName" Grid.Row="0" Grid.Column="1" Margin="10"/>
+
+            <!-- Email (Read-only) -->
+            <Label Content="Email:" Grid.Row="1" Grid.Column="0" Margin="10"/>
+            <TextBox x:Name="txtEmail" Grid.Row="1" Grid.Column="1" Margin="10" IsReadOnly="True"/>
+
+            <!-- Password -->
+            <Label Content="Password:" Grid.Row="2" Grid.Column="0" Margin="10"/>
+            <TextBox x:Name="txtPassword" Grid.Row="2" Grid.Column="1" Margin="10" Visibility="Collapsed"/>
+            <PasswordBox x:Name="pwdPassword" Grid.Row="2" Grid.Column="1" Margin="10" Visibility="Visible"/>
+
+            <!-- Confirm Password -->
+            <Label Content="Confirm Password:" Grid.Row="3" Grid.Column="0" Margin="10"/>
+            <TextBox x:Name="txtConfirmPassword" Grid.Row="3" Grid.Column="1" Margin="10" Visibility="Collapsed"/>
+            <PasswordBox x:Name="pwdConfirmPassword" Grid.Row="3" Grid.Column="1" Margin="10" Visibility="Visible"/>
+
+            <!-- Show Password Checkbox -->
+            <CheckBox x:Name="chkShowPassword" Content="Show Password" Grid.Row="4" Grid.Column="1" Margin="10" VerticalAlignment="Center" Checked="chkShowPassword_Checked" Unchecked="chkShowPassword_Unchecked"/>
+
+            <!-- Phone -->
+            <Label Content="Phone:" Grid.Row="5" Grid.Column="0" Margin="10"/>
+            <TextBox x:Name="txtPhone" Grid.Row="5" Grid.Column="1" Margin="10"/>
+
+            <!-- Address -->
+            <Label Content="Address:" Grid.Row="6" Grid.Column="0" Margin="10"/>
+            <TextBox x:Name="txtAddress" Grid.Row="6" Grid.Column="1" Margin="10"/>
+
+            <!-- Buttons -->
+            <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <Button x:Name="btnSave" Content="Save" Width="100" Margin="5" Click="btnSave_Click"/>
+                <Button x:Name="btnCancel" Content="Cancel" Width="100" Margin="5" Click="btnCancel_Click"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

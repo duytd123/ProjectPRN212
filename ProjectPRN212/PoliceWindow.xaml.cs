@@ -86,8 +86,8 @@ namespace ProjectPRN212
                     return;
                 }
 
-                Notification notificationWindow = new Notification(selectedReport, _policeObject);
-                notificationWindow.Show();
+                PoliceNotification policeNotification = new PoliceNotification(selectedReport, _policeObject);
+                policeNotification.Show();
                 this.Close();
             }
             else

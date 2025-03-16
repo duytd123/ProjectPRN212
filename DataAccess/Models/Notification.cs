@@ -14,7 +14,7 @@ public partial class Notification
 
     public DateTime? SentDate { get; set; }
 
-    public bool? IsRead { get; set; }
+    public bool IsRead { get; set; } = false;
 
     public virtual Vehicle? PlateNumberNavigation { get; set; }
 

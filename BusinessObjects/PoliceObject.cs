@@ -23,7 +23,6 @@ namespace BusinessObjects
             return _policeRepository.GetAllReports();
         }
 
-
         public void VerifyAndProcessReport(int reportId, string status, int processedBy)
         {
             _policeRepository.UpdateReportStatus(reportId, status, processedBy);

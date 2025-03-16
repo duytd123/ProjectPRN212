@@ -33,7 +33,7 @@ namespace ProjectPRN212
             };
 
             if (openFileDialog.ShowDialog() == true)
-            {
+            {   
                 _imagePath = openFileDialog.FileName;
                 txtImageName.Text = Path.GetFileName(_imagePath);
             }
@@ -66,8 +66,8 @@ namespace ProjectPRN212
                 }
 
                 // Upload files
-                string imageUrl = _reportObjects.UploadFile(_imagePath, "images");
-                string videoUrl = _reportObjects.UploadFile(_videoPath, "videos");
+                string imageUrl = _reportObjects.UploadFile(_imagePath);
+                string videoUrl = _reportObjects.UploadFile(_videoPath);
 
                 // Create report object
                 var report = new Report

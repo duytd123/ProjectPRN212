@@ -128,7 +128,7 @@ namespace ProjectPRN212
         {
             var roleWindows = new Dictionary<string, Func<Window>>
     {
-        { "Citizen", () => new UserWindow() },
+        { "Citizen", () => new UserWindow(user.UserId) },
         { "TrafficPolice", () => new PoliceWindow(_policeObject) },
         { "Admin", () => new AdminWindow() }
     };
