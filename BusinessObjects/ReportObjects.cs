@@ -49,7 +49,7 @@
 
                 File.Copy(filePath, destinationPath);
 
-                return $"Police/{fileName}";
+                return $"D:/University/PRN212/ProjectPRN/ProjectPRN212/Police/{fileName}";
             }
             catch (Exception ex)
             {

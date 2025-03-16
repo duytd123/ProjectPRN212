@@ -1,20 +1,8 @@
 ﻿using BusinessObjects;
 using DataAccess.Models;
-using DataAccess.Repository.Interface;
 using DataAccess.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DataAccess.Repository.Interface;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ProjectPRN212
 {
@@ -25,7 +13,7 @@ namespace ProjectPRN212
     {
         private readonly ViolationObject _violationObject;
         private PoliceObject _policeObject;
-
+        
         public ReportWindow(PoliceObject policeObject)
         {
             InitializeComponent();
