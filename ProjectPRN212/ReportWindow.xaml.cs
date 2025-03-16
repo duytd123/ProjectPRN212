@@ -13,14 +13,15 @@ namespace ProjectPRN212
     {
         private readonly ViolationObject _violationObject;
         private PoliceObject _policeObject;
-        
-        public ReportWindow(PoliceObject policeObject)
+        private int _policeUserId;
+        public ReportWindow(PoliceObject policeObject, int policeUserId)
         {
             InitializeComponent();
 
             IViolationRepository violationRepository = new ViolationRepository(new ProjectPrn212Context());
             _violationObject = new ViolationObject(violationRepository);
             _policeObject = policeObject;
+            _policeUserId = policeUserId;
             LoadReportData();
             LoadReportStatistics();
 
@@ -50,7 +51,7 @@ namespace ProjectPRN212
 
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
-            PoliceWindow policeWindow = new PoliceWindow(_policeObject);
+            PoliceWindow policeWindow = new PoliceWindow(_policeObject,_policeUserId);
             policeWindow.Show();
             this.Close();
         }

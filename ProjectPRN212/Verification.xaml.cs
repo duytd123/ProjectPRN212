@@ -16,12 +16,13 @@ namespace ProjectPRN212
     {
         private Report _selectedReport;
         private PoliceObject _policeObject;
-
-        public Verification(Report report, PoliceObject policeObject)
+        private int _policeUserId;
+        public Verification(Report report, PoliceObject policeObject, int policeUserId)
         {
             InitializeComponent();
             _selectedReport = report;
             _policeObject = policeObject;
+            _policeUserId = policeUserId;
 
             PlateNumberTextBlock.Text = _selectedReport.PlateNumber;
             ViolationTypeTextBlock.Text = _selectedReport.ViolationType;
@@ -178,7 +179,7 @@ namespace ProjectPRN212
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            PoliceWindow policeWindow = new PoliceWindow(_policeObject);
+            PoliceWindow policeWindow = new PoliceWindow(_policeObject,_policeUserId);
             policeWindow.Show();
             this.Close();
         }

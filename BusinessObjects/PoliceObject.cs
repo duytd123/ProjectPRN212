@@ -23,6 +23,11 @@ namespace BusinessObjects
             return _policeRepository.GetAllReports();
         }
 
+        public int? GetLoggedInPoliceUserId(string email)
+        {
+            return _policeRepository.GetPoliceUserId(email);
+        }
+
         public void VerifyAndProcessReport(int reportId, string status, int processedBy)
         {
             _policeRepository.UpdateReportStatus(reportId, status, processedBy);
@@ -56,7 +61,6 @@ namespace BusinessObjects
         {
             return _policeRepository.DoesVehicleExist(plateNumber);
         }
-
 
     }
 }

@@ -18,5 +18,6 @@ namespace DataAccess.Repository.Interface
         Violation? GetViolationByReportId(int reportId);
 
         bool DoesVehicleExist(string plateNumber);
+        int? GetPoliceUserId(string email);
     }
 }
