@@ -1,37 +1,35 @@
 ﻿using BusinessObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 using DataAccess.Models;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace ProjectPRN212
 {
     public partial class UserWindow : Window
     {
-
+        private readonly NotifyObject _notifyObject;
         private DispatcherTimer _sessionTimer;
         private readonly AdminObject _adminObject;
-        public UserWindow()
+        private readonly int currentUserId;
+        private readonly UserObject _userObjects;
+        private readonly ReportObjects _reportObjects;
+        private User currentUser;
+        public UserWindow(int userId)
         {
             InitializeComponent();
+            currentUserId = userId;
+            _userObjects = new UserObject();
+            _reportObjects = new ReportObjects();
+            _notifyObject = new NotifyObject();
+
             _adminObject = new AdminObject(new DataAccess.Repository.AdminRepository(new DataAccess.Models.ProjectPrn212Context()));
+
             if (_adminObject.IsAutoLogoutEnabled())
             {
                 int timeoutMinutes = _adminObject.GetSessionTimeout();
                 StartSessionTimer(timeoutMinutes);
             }
+            LoadCurrentUser();
         }
 
         private void StartSessionTimer(int timeoutMinutes)
@@ -83,24 +81,12 @@ namespace ProjectPRN212
                 }
             }
             return false;
+            }
             
-        private readonly int currentUserId;
-        private readonly UserObject _userObjects;
-        private readonly ReportObjects _reportObjects;
-        private User _currentUser;
-
-        public UserWindow(int userId)
-        {
-            InitializeComponent();
-            currentUserId = userId;
-            _userObjects = new UserObject();
-            _reportObjects = new ReportObjects();
-            LoadCurrentUser();
-        }
 
         private void SendFeedback_Click(object sender, RoutedEventArgs e)
         {
-            var sendFeedback = new SendFeedback(currentUserId);
+            SendFeedback sendFeedback = new SendFeedback(currentUserId);
             sendFeedback.ShowDialog();
         }
 
@@ -109,12 +95,11 @@ namespace ProjectPRN212
             try
             {
                 // Fetch user data using UserObject
-                _currentUser = _userObjects.GetUserById(currentUserId);
+                currentUser = _userObjects.GetUserById(currentUserId);
 
-                if (_currentUser == null)
+                if (currentUser == null)
                 {
-                    MessageBox.Show("Không thể tải thông tin người dùng!", "Lỗi",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Không thể tải thông tin người dùng!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                     Application.Current.Shutdown();
                 }
             }
@@ -127,9 +112,9 @@ namespace ProjectPRN212
 
         private void TrackStatus_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentUser != null)
+            if (currentUser != null)
             {
-                var trackingWindow = new TrackStatusWindow(_currentUser);
+                TrackStatusWindow trackingWindow = new TrackStatusWindow(currentUser);
                 trackingWindow.Show();
             }
             else
@@ -148,20 +133,16 @@ namespace ProjectPRN212
 
         }
 
-        private void Logout_Click(object sender, RoutedEventArgs e)
+        private void NotifyButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show("Bạn có chắc chắn muốn đăng xuất?", "Xác nhận đăng xuất", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (result == MessageBoxResult.Yes)
-            {
-                Application.Current.Shutdown();
-            }
+            NotificationWindow notificationsWindow = new NotificationWindow(currentUserId, _notifyObject);
+            notificationsWindow.ShowDialog();
         }
 
         private void ProfileButton_Click(object sender, RoutedEventArgs e)
         {
-
+            ProfileWindow profileWindow = new ProfileWindow(currentUserId);
+            profileWindow.ShowDialog();
         }
-
-
     }
 }

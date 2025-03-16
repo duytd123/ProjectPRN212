@@ -1,37 +1,27 @@
 ﻿using BusinessObjects;
 using DataAccess.Models;
-using DataAccess.Repository;
-using DataAccess.Repository.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ProjectPRN212
 {
-    /// <summary>
-    /// Interaction logic for Notification.xaml
-    /// </summary>
-    public partial class Notification : Window
+    public partial class PoliceNotification : Window
     {
         private Report _selectedReport;
         private PoliceObject _policeObject;
-        public Notification(Report report, PoliceObject policeObject)
+        private NotifyObject _notifyObject;
+        private int _policeUserId;
+
+        public PoliceNotification(Report report, PoliceObject policeObject, int policeUserId)
         {
             InitializeComponent();
             _selectedReport = report;
             _policeObject = policeObject;
+            _policeUserId = policeUserId;
+            _notifyObject = new NotifyObject();
             LoadReportDetails();
         }
+
         private void LoadReportDetails()
         {
             PlateNumberTextBlock.Text = _selectedReport.PlateNumber;
@@ -43,7 +33,7 @@ namespace ProjectPRN212
 
         private void NotificationTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (NotificationTypeComboBox.SelectedIndex == 1) 
+            if (NotificationTypeComboBox.SelectedIndex == 1)
             {
                 FineAmountTextBox.IsEnabled = true;
                 DueDatePicker.IsEnabled = true;
@@ -64,8 +54,8 @@ namespace ProjectPRN212
             }
 
             string message = NotificationMessageTextBox.Text;
-            var user = _policeObject.GetUserByPlateNumber(_selectedReport.PlateNumber);
-            if (user == null)
+            var violator = _policeObject.GetUserByPlateNumber(_selectedReport.PlateNumber);
+            if (violator == null)
             {
                 MessageBox.Show("Không tìm thấy thông tin người vi phạm.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -73,29 +63,39 @@ namespace ProjectPRN212
 
             decimal? fineAmount = null;
             DateTime? dueDate = null;
-
-            if (NotificationTypeComboBox.SelectedIndex == 1) 
+            if (NotificationTypeComboBox.SelectedIndex == 1)
             {
                 if (!decimal.TryParse(FineAmountTextBox.Text, out decimal fine) || fine <= 0)
                 {
                     MessageBox.Show("Số tiền phạt không hợp lệ.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-
                 if (DueDatePicker.SelectedDate == null)
                 {
                     MessageBox.Show("Vui lòng chọn ngày hạn nộp phạt.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-
                 fineAmount = fine;
                 dueDate = DueDatePicker.SelectedDate;
             }
 
-            _policeObject.NotifyViolator(user.UserId, message, _selectedReport.PlateNumber, fineAmount, dueDate);
+            try
+            {
+                _policeObject.VerifyAndProcessReport(_selectedReport.ReportId, "Approved", _policeUserId);
 
-            MessageBox.Show("Gửi thông báo thành công.", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
-            this.Close();
+                string violaterMessage = $"Xe biển số {_selectedReport.PlateNumber} đã bị phản ánh.";
+                _policeObject.NotifyViolator(violator.UserId, violaterMessage, _selectedReport.PlateNumber, fineAmount, dueDate);
+
+                string reporterMessage = $"Đơn phản ánh của bạn về xe biển số {_selectedReport.PlateNumber} đã được duyệt.";
+                _notifyObject.AddNotification(_selectedReport.ReporterId, reporterMessage, _selectedReport.PlateNumber);
+
+                MessageBox.Show("Xử lý báo cáo và gửi thông báo thành công.", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi xử lý: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
 
@@ -105,5 +105,6 @@ namespace ProjectPRN212
             policeWindow.Show();
             this.Close();
         }
+
     }
 }
