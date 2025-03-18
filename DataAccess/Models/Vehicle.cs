@@ -20,7 +20,5 @@ public partial class Vehicle
 
     public virtual User Owner { get; set; } = null!;
 
-    public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
-
     public virtual ICollection<Violation> Violations { get; set; } = new List<Violation>();
 }

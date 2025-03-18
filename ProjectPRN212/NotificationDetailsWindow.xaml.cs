@@ -24,7 +24,7 @@ namespace ProjectPRN212
             if (report.Violations.Any())
             {
                 var violation = report.Violations.First();
-                FineAmountText.Text = $"Số tiền phạt: {violation.FineAmount}";
+                //FineAmountText.Text = $"Số tiền phạt: {violation.FineAmount}";
                 DueDateText.Text = $"Hạn nộp phạt: {violation.FineDate?.ToString("dd/MM/yyyy")}";
             }
 

@@ -44,13 +44,39 @@ namespace DataAccess.Repository
             }
 
             var report = _context.Reports.FirstOrDefault(r => r.ReportId == reportId);
+
             if (report != null)
             {
                 report.Status = status;
                 report.ProcessedBy = processedBy;
+
+                // Nếu trạng thái là "Approved", tự động tạo Violation
+                if (status == "Approved")
+                {
+                    // 🔍 Tìm chủ sở hữu xe dựa trên PlateNumber
+                    var vehicleOwner = _context.Vehicles
+                                               .Where(v => v.PlateNumber == report.PlateNumber)
+                                               .Select(v => v.Owner)
+                                               .FirstOrDefault();
+
+                    // ⚠️ Nếu tìm thấy chủ xe thì gán vào ViolatorId
+                    var violation = new Violation
+                    {
+                        ReportId = report.ReportId,
+                        PlateNumber = report.PlateNumber,
+                        ViolatorId = vehicleOwner?.UserId, // Gán ID của chủ xe (có thể null)
+                        ViolationTypeId = report.ViolationTypeId,
+                        FineDate = DateTime.Now,
+                        PaidStatus = false
+                    };
+
+                    _context.Violations.Add(violation);
+                }
+
                 _context.SaveChanges();
             }
         }
+
 
         public void SendNotification(int userId, string message, string plateNumber, decimal? fineAmount, DateTime? dueDate)
         {
@@ -111,10 +137,17 @@ namespace DataAccess.Repository
                            .Any(n => n.PlateNumber == plateNumber );
         }
 
+        //public Violation? GetViolationByReportId(int reportId)
+        //{
+        //    return _context.Violations
+        //                   .Include(v => v.Report) 
+        //                   .FirstOrDefault(v => v.ReportId == reportId);
+        //}
+
         public Violation? GetViolationByReportId(int reportId)
         {
             return _context.Violations
-                           .Include(v => v.Report) 
+                           .Include(v => v.ViolationType)
                            .FirstOrDefault(v => v.ReportId == reportId);
         }
 

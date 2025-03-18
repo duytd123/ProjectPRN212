@@ -13,16 +13,19 @@ namespace ProjectPRN212
         private string _videoPath;
         private readonly int _currentUserId;
         private readonly ReportObjects _reportObjects;
+        private readonly ViolationObject _violationObject;
 
         public SendFeedback(int userId)
         {
             InitializeComponent();
             _currentUserId = userId;
             _reportObjects = new ReportObjects();
+            _violationObject = new ViolationObject();
 
             btnUploadImage.Click += BtnUploadImage_Click;
             btnUploadVideo.Click += BtnUploadVideo_Click;
             btnSubmit.Click += BtnSubmit_Click;
+            LoadViolationTypes();
         }
         private void BtnUploadImage_Click(object sender, RoutedEventArgs e)
         {
@@ -73,7 +76,7 @@ namespace ProjectPRN212
                 var report = new Report
                 {
                     ReporterId = _currentUserId,
-                    ViolationType = ((ComboBoxItem)cbViolationType.SelectedItem).Content.ToString(),
+                    //ViolationType = ((ComboBoxItem)cbViolationType.SelectedItem).Content.ToString(),
                     Description = txtDescription.Text,
                     PlateNumber = txtPlateNumber.Text,
                     ImageUrl = imageUrl,
@@ -103,5 +106,14 @@ namespace ProjectPRN212
                 Console.WriteLine($"Exception details: {ex}");
             }
         }
+
+        private async void LoadViolationTypes()
+        {
+            var violations = await _violationObject.GetAllViolationTypes();
+            cbViolationType.ItemsSource = violations;
+            cbViolationType.DisplayMemberPath = "ViolationName";
+            cbViolationType.SelectedValuePath = "ViolationTypeId";
+        }
+
     }
 }

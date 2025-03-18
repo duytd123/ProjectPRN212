@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjectPRN212"
         mc:Ignorable="d"
-        Title="PoliceNotification" Height="450" Width="800">
+        WindowStartupLocation="CenterScreen"
+        Title="Thông báo vi phạm" Height="450" Width="800">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -24,43 +25,38 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Thông tin vi phạm -->
-        <TextBlock Text="🚗 Plate Number:" FontWeight="Bold" Foreground="DarkBlue" Grid.Row="1" Grid.Column="0"/>
+        <TextBlock Text="🚗 Biển số xe:" FontWeight="Bold" Foreground="DarkBlue" Grid.Row="1" Grid.Column="0"/>
         <TextBlock Name="PlateNumberTextBlock" Grid.Row="1" Grid.Column="1"/>
 
-        <TextBlock Text="⚠ Status:" FontWeight="Bold" Foreground="DarkBlue" Grid.Row="2" Grid.Column="0"/>
+        <TextBlock Text="⚠ Tình trạng xử lý:" FontWeight="Bold" Foreground="DarkBlue" Grid.Row="2" Grid.Column="0"/>
         <TextBlock Name="StatusTextBlock" Grid.Row="2" Grid.Column="1"/>
 
-        <TextBlock Text="👤 Violator Name:" FontWeight="Bold" Foreground="DarkBlue" Grid.Row="3" Grid.Column="0"/>
+        <TextBlock Text="👤 Tên chủ xe vi phạm:" FontWeight="Bold" Foreground="DarkBlue" Grid.Row="3" Grid.Column="0"/>
         <TextBlock Name="ViolatorNameTextBlock" Grid.Row="3" Grid.Column="1"/>
 
-        <!-- Chọn loại thông báo -->
-        <TextBlock Text="📢 Notification Type:" FontWeight="Bold" Foreground="DarkBlue" Grid.Row="4" Grid.Column="0"/>
+        <TextBlock Text="📢 Chọn loại vi phạm:" FontWeight="Bold" Foreground="DarkBlue" Grid.Row="4" Grid.Column="0"/>
         <ComboBox Name="NotificationTypeComboBox" Grid.Row="4" Grid.Column="1" SelectionChanged="NotificationTypeComboBox_SelectionChanged">
-            <ComboBoxItem Content="⚠ Warning"/>
-            <ComboBoxItem Content="💰 Penalty"/>
+            <ComboBoxItem Content="⚠ Cảnh cáo"/>
+            <ComboBoxItem Content="💰 Phạt tiền"/>
         </ComboBox>
 
-        <!-- Nội dung thông báo -->
-        <TextBlock Text="📝 Message:" FontWeight="Bold" Foreground="DarkBlue" Grid.Row="5" Grid.Column="0"/>
+        <TextBlock Text="📝 Thông báo chi tiết:" FontWeight="Bold" Foreground="DarkBlue" Grid.Row="5" Grid.Column="0"/>
         <TextBox Name="NotificationMessageTextBox" Grid.Row="5" Grid.Column="1" Height="80" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
 
-        <!-- Mức phạt và hạn chót (chỉ hiển thị khi chọn 'Penalty') -->
         <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-            <TextBlock Text="💰 Fine Amount (VND):" FontWeight="Bold" Margin="0,5,5,0"/>
-            <TextBox Name="FineAmountTextBox" Width="120" IsEnabled="False"/>
+            <TextBlock Text="💰 Tiền phạt (VND):" FontWeight="Bold" Margin="0,5,5,0"/>
+            <TextBox Name="FineAmountTextBox" Width="120" IsReadOnly="True" TextChanged="FineAmountTextBox_TextChanged" />
 
-            <TextBlock Text="📅 Due Date:" FontWeight="Bold" Margin="10,5,5,0"/>
+            <TextBlock Text="📅 Ngày hạn nộp:" FontWeight="Bold" Margin="10,5,5,0"/>
             <DatePicker Name="DueDatePicker" Width="150" IsEnabled="False"/>
         </StackPanel>
 
-        <!-- Nút bấm -->
         <StackPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
             <Button Name="BackButton" Width="100" Height="35" Click="BackButton_Click" Margin="6"
                 Background="Gray" Foreground="White" FontWeight="Bold">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="🔙" FontSize="14"/>
-                    <TextBlock Text=" Back" Margin="5,0,0,0"/>
+                    <TextBlock Text=" Quay lại" Margin="5,0,0,0"/>
                 </StackPanel>
             </Button>
 
@@ -68,7 +64,7 @@
                 Background="DarkBlue" Foreground="White" FontWeight="Bold">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="📢" FontSize="14"  Height="20"/>
-                    <TextBlock Text=" Send Notification" Margin="5,0,0,0"/>
+                    <TextBlock Text=" Gửi" Margin="5,0,0,0"/>
                 </StackPanel>
             </Button>
         </StackPanel>

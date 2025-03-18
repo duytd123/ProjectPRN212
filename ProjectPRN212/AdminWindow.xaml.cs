@@ -161,9 +161,6 @@ namespace ProjectPRN212
             this.Hide();
         }
 
-       
-
-
         private void btnSecutiryLogin_Click(object sender, RoutedEventArgs e)
         {
             LoginManagement login = new LoginManagement();

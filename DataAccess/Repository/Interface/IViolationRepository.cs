@@ -10,6 +10,9 @@ namespace DataAccess.Repository.Interface
     public interface IViolationRepository
     {
         List<Report> GetViolationReports(); 
-        Dictionary<string, int> GetReportStatistics(); 
+        Dictionary<string, int> GetReportStatistics();
+        List<Violation> GetViolationsByType(int violationTypeId);
+
+        Task<List<ViolationType>> GetAllViolationTypes();
     }
 }

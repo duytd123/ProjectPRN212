@@ -88,7 +88,7 @@ namespace DataAccess.Repository
                     SessionTimeout = 30,
                     EnableLogging = false,
                     EnableTwoFactorAuth = false,
-                    EnableAutoLogout = false
+                    EnableAutoLogout = true
                 };
 
                 string defaultJson = JsonConvert.SerializeObject(defaultConfig, Formatting.Indented);

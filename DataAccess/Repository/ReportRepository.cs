@@ -66,7 +66,7 @@ namespace DataAccess.Repository
 
                 if (!string.IsNullOrEmpty(violationType) && violationType != "Tất cả")
                 {
-                    query = query.Where(r => r.ViolationType == violationType);
+                    query = query.Where(r => r.ViolationTypeId == 1);
                 }
 
                 if (!string.IsNullOrEmpty(plateNumber))

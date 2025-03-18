@@ -67,12 +67,7 @@
 
                 <!-- Violation Type -->
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Loại vi phạm:" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Margin="5"/>
-                <ComboBox Grid.Row="0" Grid.Column="1" Name="cbViolationType">
-                    <ComboBoxItem Content="Lấn làn"/>
-                    <ComboBoxItem Content="Vượt đèn đỏ"/>
-                    <ComboBoxItem Content="Đi sai làn đường"/>
-                    <ComboBoxItem Content="Không đội mũ bảo hiểm"/>
-                </ComboBox>
+                <ComboBox Grid.Row="0" Grid.Column="1" Name="cbViolationType"/>
 
                 <!-- Description -->
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Mô tả:" VerticalAlignment="Top" FontSize="14" FontWeight="Bold" Margin="5"/>
