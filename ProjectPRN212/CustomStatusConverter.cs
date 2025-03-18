@@ -30,9 +30,16 @@ namespace ProjectPRN212
                     return boolValue ? Brushes.Green : Brushes.Red;
                 }
             }
-            else if (value is string status && parameter?.ToString() == "Visibility")
+            else if (value is string status)
             {
-                return status == "Approved" ? Visibility.Visible : Visibility.Collapsed;
+                if (parameter?.ToString() == "Visibility")
+                {
+                    return status == "Approved" ? Visibility.Visible : Visibility.Collapsed;
+                }
+                else if (parameter?.ToString() == "RejectionReason")
+                {
+                    return string.IsNullOrEmpty(status) ? Visibility.Collapsed : Visibility.Visible;
+                }
             }
             return DependencyProperty.UnsetValue;
         }

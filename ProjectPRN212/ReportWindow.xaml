@@ -6,25 +6,23 @@
         xmlns:local="clr-namespace:ProjectPRN212"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="Báo cáo vi phạm giao thông" Height="500" Width="900">
+        Title="Báo cáo vi phạm giao thông" Height="520" Width="750">
     <Grid>
         <TextBlock Text="Báo cáo số lượng vi phạm theo khu vực và loại vi phạm"
                    FontSize="16" FontWeight="Bold" Margin="10"/>
 
-        <!-- DataGrid hiển thị danh sách báo cáo vi phạm -->
         <DataGrid x:Name="ReportGrid" Margin="10,40,10,150"
                   AutoGenerateColumns="False"
                   IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Mã Báo Cáo" Binding="{Binding ReportId}" Width="80"/>
+                <DataGridTextColumn Header="" Binding="{Binding ReportId}" Width="40"/>
                 <DataGridTextColumn Header="Khu vực" Binding="{Binding Location}" Width="200"/>
-                <DataGridTextColumn Header="Loại Vi Phạm" Binding="{Binding ViolationType}" Width="200"/>
+                <DataGridTextColumn Header="Loại Vi Phạm" Binding="{Binding ViolationType.ViolationName}" Width="200"/>
                 <DataGridTextColumn Header="Trạng Thái" Binding="{Binding Status}" Width="120"/>
-                <DataGridTextColumn Header="Ngày Báo Cáo" Binding="{Binding ReportDate}" Width="150"/>
+                <DataGridTextColumn Header="Thời gian" Binding="{Binding ReportDate}" Width="150"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- GroupBox chứa thống kê số lượng báo cáo theo trạng thái -->
         <GroupBox Header="Thống kê mức độ xử lý phản ánh" Margin="10,330,10,50">
             <StackPanel>
                 <TextBlock x:Name="PendingCount" FontSize="14" FontWeight="Bold" Margin="5"/>

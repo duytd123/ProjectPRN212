@@ -25,7 +25,7 @@ namespace ProjectPRN212
             _policeUserId = policeUserId;
 
             PlateNumberTextBlock.Text = _selectedReport.PlateNumber;
-            ViolationTypeTextBlock.Text = _selectedReport.ViolationType;
+           // ViolationTypeTextBlock.Text = _selectedReport.ViolationType;
             DescriptionTextBlock.Text = _selectedReport.Description;
             LocationTextBlock.Text = _selectedReport.Location;
             ReportDateTextBlock.Text = _selectedReport.ReportDate?.ToString("yyyy-MM-dd HH:mm") ?? "N/A";

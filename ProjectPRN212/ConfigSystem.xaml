@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjectPRN212"
         mc:Ignorable="d"
-        Title="ConfigSystem" Height="450" Width="800">
+        Title="Cấu hình hệ thống" Height="450" Width="800">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -26,8 +26,8 @@
         <CheckBox Name="chkEnableAutoLogout" Content="Enable Auto Logout" Grid.Row="3" Grid.Column="0" Margin="5"/>
 
         <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-            <Button Name="btnSaveSettings" Content="Save Settings" Width="150" Margin="5" Click="btnSaveSettings_Click"/>
-            <Button Name="btnBackToAdmin" Content="Back to Admin" Width="150" Margin="5" Click="btnBackToAdmin_Click"/>
+            <Button Name="btnSaveSettings" Content="Lưu" Width="150" Margin="5" Click="btnSaveSettings_Click"/>
+            <Button Name="btnBackToAdmin" Content="Trở lại" Width="150" Margin="5" Click="btnBackToAdmin_Click"/>
         </StackPanel>
     </Grid>
 </Window>

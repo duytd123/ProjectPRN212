@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="ReportChartWindow" Height="450" Width="800"
+        Title="Báo cáo theo sơ đồ" Height="550" Width="800"
          WindowStartupLocation="CenterScreen">
     <Grid>
         <TextBlock Text="Thống kê báo cáo vi phạm" FontSize="16" FontWeight="Bold" Margin="10"/>
