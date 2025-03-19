@@ -2,8 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:ProjectPRN212"
-        Title="Report Details" Height="450" Width="600"
-        WindowStartupLocation="CenterScreen" Background="#FAFAFA">
+        Title="Báon cáo" Height="300" Width="350"
+        WindowStartupLocation="CenterScreen" Background="Aquamarine">
     
     <Window.Resources>
         <local:CustomStatusConverter x:Key="CustomStatusConverter"/>
@@ -11,47 +11,60 @@
     <Grid Margin="15">
         <Border Background="White" Padding="20" CornerRadius="10" BorderBrush="Gray" BorderThickness="1">
             <StackPanel>
-                <TextBlock Text="📌 Report Details" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+                <TextBlock Text="📌 Báo cáo chi tiết" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="📄 Report ID: " FontWeight="Bold"/>
-                    <TextBlock Text="{Binding ReportId}" Foreground="Blue"/>
+                    <TextBlock Text="ID: " />
+                    <TextBlock Text="{Binding ReportId}" Foreground="Blue" FontWeight="Bold"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="🚗 Plate Number: " FontWeight="Bold"/>
-                    <TextBlock Text="{Binding PlateNumber}" Foreground="Black"/>
+                    <TextBlock Text="Biển số: " />
+                    <TextBlock Text="{Binding PlateNumber}" Foreground="Black" FontWeight="Bold"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="👤 Reporter: " FontWeight="Bold"/>
-                    <TextBlock Text="{Binding Reporter.FullName}" Foreground="Black"/>
+                    <TextBlock Text="Tên: " />
+                    <TextBlock Text="{Binding Reporter.FullName}" Foreground="Black" FontWeight="Bold"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="📅 Report Date: " FontWeight="Bold"/>
-                    <TextBlock Text="{Binding ReportDate, StringFormat=\{0:dd/MM/yyyy\}}" Foreground="Black"/>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="⚖ Status: " FontWeight="Bold"/>
-                    <TextBlock Text="{Binding Status}" Foreground="Black"/>
+                    <TextBlock Text="Ngày báo cáo: " />
+                    <TextBlock Text="{Binding ReportDate, StringFormat=\{0:dd/MM/yyyy\}}" Foreground="Black" FontWeight="Bold"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" 
             Visibility="{Binding RejectionReason, Converter={StaticResource CustomStatusConverter}, ConverterParameter=RejectionReason}">
-                    <TextBlock Text="❌ Rejection Reason: " FontWeight="Bold" Foreground="Red"/>
-                    <TextBlock Text="{Binding RejectionReason}" Foreground="Red"/>
+                    <TextBlock Text="Lý do bị hủy: "  Foreground="Black"/>
+                    <TextBlock Text="{Binding RejectionReason}" Foreground="Red" FontWeight="Bold"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="💵 Fine Amount: " FontWeight="Bold"/>
-                    <TextBlock Text="{Binding Violations[0].FineAmount, StringFormat=C}" Foreground="Green"/>
-                </StackPanel>
+                    <TextBlock Text="Chưa có thông báo tiền vi phạm" Foreground="Black">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding NotificationSent}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
 
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="📨 Notification Sent: " FontWeight="Bold"/>
-                    <TextBlock Text="{Binding NotificationSent}" Foreground="Black"/>
+                    <TextBlock Text="{Binding ViolationType.FineAmount, StringFormat='Tiền phạt: {0:N0} VND'}" Foreground="Black" FontWeight="Bold">
+                    <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding NotificationSent}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </StackPanel>
 
                 <Button Content=" Close" Click="Close_Click"  Foreground="Black"

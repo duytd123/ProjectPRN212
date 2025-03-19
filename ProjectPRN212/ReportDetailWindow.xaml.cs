@@ -20,10 +20,12 @@ namespace ProjectPRN212
     /// </summary>
     public partial class ReportDetailWindow : Window
     {
+        private Report _report;
         public ReportDetailWindow(Report report)
         {
             InitializeComponent();
-            DataContext = report;
+            _report = report;
+            DataContext = _report;
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
