@@ -32,7 +32,7 @@ namespace ProjectPRN212
         {
             if (ReportChart == null)
             {
-                MessageBox.Show("Lỗi: ReportChart chưa được khởi tạo!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Report chưa được khởi tạo!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -44,6 +44,14 @@ namespace ProjectPRN212
             {
                 Title = "Trạng thái",
                 Labels = labels
+            });
+
+            ReportChart.AxisY.Clear();
+            ReportChart.AxisY.Add(new Axis
+            {
+                Title = "Số lượng báo cáo",
+                MinValue = 0, 
+                Separator = new LiveCharts.Wpf.Separator { Step = 1 } 
             });
 
             ReportChart.Series.Clear();

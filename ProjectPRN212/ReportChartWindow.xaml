@@ -15,8 +15,13 @@
             </lvc:CartesianChart.AxisX>
 
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Số lượng báo cáo" />
+                <lvc:Axis Title="Số lượng báo cáo" MinValue="0">
+                    <lvc:Axis.Separator>
+                        <lvc:Separator Step="1"/>
+                    </lvc:Axis.Separator>
+                </lvc:Axis>
             </lvc:CartesianChart.AxisY>
+
         </lvc:CartesianChart>
 
         <Button Content="Đóng" HorizontalAlignment="Right" VerticalAlignment="Bottom"
