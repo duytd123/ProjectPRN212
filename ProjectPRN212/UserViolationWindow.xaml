@@ -60,7 +60,7 @@
                          IsEnabled="{Binding CanRespond}" BorderBrush="#007ACC" BorderThickness="1" Padding="10"/>
 
                 <!-- Nút gửi phản hồi -->
-                <Button x:Name="SubmitResponseButton" Content="Gửi phản hồi" Grid.Row="7" Grid.Column="1" Margin="5" HorizontalAlignment="Right" Width="120" Click="SubmitResponse_Click" IsEnabled="{Binding CanRespond}"/>
+                <Button x:Name="SubmitResponseButton" Content="Gửi phản hồi" Grid.Row="7" Grid.Column="1" Margin="5" HorizontalAlignment="Right" Width="120" IsEnabled="{Binding CanRespond}"/>
             </StackPanel>
         </Border>
     </Grid>

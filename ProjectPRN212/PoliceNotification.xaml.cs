@@ -31,25 +31,26 @@ namespace ProjectPRN212
             ViolatorNameTextBlock.Text = violator?.FullName ?? "Unknown";
 
             var violation = _policeObject.GetViolationByReportId(_selectedReport.ReportId);
-            if (violation != null)
-            {
-                FineAmountTextBox.Text = violation.FineAmount.ToString();
-            }
+            //if (violation != null)
+            //{
+            //    FineAmountTextBox.Text = violation.FineAmount.ToString();
+            //}
         }
 
         private void NotificationTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             bool isFineNotification = NotificationTypeComboBox.SelectedIndex == 1;
-            FineAmountTextBox.IsEnabled = isFineNotification;
+            FineAmountTextBox.IsEnabled = false;
             DueDatePicker.IsEnabled = isFineNotification;
 
             if (isFineNotification)
             {
                 var violation = _policeObject.GetViolationByReportId(_selectedReport.ReportId);
-                if (violation != null)
+                if (violation != null && violation.ViolationType != null)
                 {
-                    FineAmountTextBox.Text = violation.FineAmount.ToString();
+                    FineAmountTextBox.Text = violation.ViolationType.FineAmount.ToString();
                 }
+
             }
             else
             {
@@ -79,11 +80,14 @@ namespace ProjectPRN212
 
             if (NotificationTypeComboBox.SelectedIndex == 1)
             {
-                if (!decimal.TryParse(FineAmountTextBox.Text, out decimal fine) || fine <= 0)
+                var violation = _policeObject.GetViolationByReportId(_selectedReport.ReportId);
+                if (violation == null || violation.ViolationType == null)
                 {
-                    MessageBox.Show("Số tiền phạt không hợp lệ.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Không thể xác định số tiền phạt.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
+
+                fineAmount = violation.ViolationType.FineAmount;
 
                 if (DueDatePicker.SelectedDate == null)
                 {
@@ -91,22 +95,22 @@ namespace ProjectPRN212
                     return;
                 }
 
-                fineAmount = fine;
                 dueDate = DueDatePicker.SelectedDate;
             }
 
-                _policeObject.VerifyAndProcessReport(_selectedReport.ReportId, "Approved", _policeUserId);
+            _policeObject.VerifyAndProcessReport(_selectedReport.ReportId, "Approved", _policeUserId);
 
-                string violaterMessage = $"Xe biển số {_selectedReport.PlateNumber} đã bị phản ánh.";
-                _policeObject.NotifyViolator(violator.UserId, violaterMessage, _selectedReport.PlateNumber, fineAmount, dueDate);
+            string violaterMessage = $"Xe biển số {_selectedReport.PlateNumber} đã bị phản ánh.";
+            //_policeObject.NotifyViolator(violator.UserId, violaterMessage, _selectedReport.PlateNumber, fineAmount, dueDate);
 
-                string reporterMessage = $"Đơn phản ánh của bạn về xe biển số {_selectedReport.PlateNumber} đã được duyệt.";
-                _notifyObject.AddNotification(_selectedReport.ReporterId, reporterMessage, _selectedReport.PlateNumber);
+            string reporterMessage = $"Đơn phản ánh của bạn về xe biển số {_selectedReport.PlateNumber} đã được duyệt.";
+            _notifyObject.AddNotification(_selectedReport.ReporterId, reporterMessage, _selectedReport.PlateNumber);
 
-                MessageBox.Show("Xử lý báo cáo và gửi thông báo thành công.", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.Close();
+            MessageBox.Show("Xử lý báo cáo và gửi thông báo thành công.", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
 
             MessageBox.Show("Gửi thông báo thành công.", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            PoliceWindow policeWindow = new PoliceWindow(_policeObject, _policeUserId);
             this.Close();
         }
 
@@ -114,10 +118,11 @@ namespace ProjectPRN212
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            PoliceWindow policeWindow = new PoliceWindow(_policeObject,_policeUserId);
+            PoliceWindow policeWindow = new PoliceWindow(_policeObject, _policeUserId);
             policeWindow.Show();
             this.Close();
         }
+
 
     }
 }

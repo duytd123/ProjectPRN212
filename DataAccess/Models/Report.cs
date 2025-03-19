@@ -9,8 +9,6 @@ public partial class Report
 
     public int ReporterId { get; set; }
 
-    public string ViolationType { get; set; } = null!;
-
     public string Description { get; set; } = null!;
 
     public string PlateNumber { get; set; } = null!;
@@ -29,16 +27,15 @@ public partial class Report
 
     public string? RejectionReason { get; set; }
 
-    public int? ResponseCount { get; set; } = 0;
-
-    public virtual Vehicle PlateNumberNavigation { get; set; } = null!;
-
     public decimal? FineAmount { get; set; }
+
+    public int? ViolationTypeId { get; set; }
 
     public virtual User? ProcessedByNavigation { get; set; }
 
     public virtual User Reporter { get; set; } = null!;
 
+    public virtual ViolationType? ViolationType { get; set; }
     public virtual ICollection<Violation> Violations { get; set; } = new List<Violation>();
 
     [NotMapped]

@@ -132,6 +132,19 @@ namespace ProjectPRN212
             }
         }
 
+        private void ViewDetail_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is int reportId)
+            {
+                var selectedReport = AllReports.FirstOrDefault(r => r.ReportId == reportId);
+                if (selectedReport != null)
+                {
+                    ReportDetailWindow reportDetailWindow = new ReportDetailWindow(selectedReport);
+                    reportDetailWindow.Show();
+                }
+            }
+        }
+
         private void StartSessionTimer(int timeoutMinutes)
         {
             _sessionTimer = new DispatcherTimer();

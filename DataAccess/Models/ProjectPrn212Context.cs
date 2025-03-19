@@ -28,6 +28,8 @@ public partial class ProjectPrn212Context : DbContext
 
     public virtual DbSet<Violation> Violations { get; set; }
 
+    public virtual DbSet<ViolationType> ViolationTypes { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
@@ -74,6 +76,7 @@ public partial class ProjectPrn212Context : DbContext
 
             entity.Property(e => e.ReportId).HasColumnName("ReportID");
             entity.Property(e => e.Description).HasColumnType("text");
+            entity.Property(e => e.FineAmount).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.ImageUrl)
                 .HasColumnType("text")
                 .HasColumnName("ImageURL");
@@ -83,6 +86,7 @@ public partial class ProjectPrn212Context : DbContext
             entity.Property(e => e.PlateNumber)
                 .HasMaxLength(15)
                 .IsUnicode(false);
+            entity.Property(e => e.RejectionReason).HasMaxLength(500);
             entity.Property(e => e.ReportDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -94,18 +98,7 @@ public partial class ProjectPrn212Context : DbContext
             entity.Property(e => e.VideoUrl)
                 .HasColumnType("text")
                 .HasColumnName("VideoURL");
-            entity.Property(e => e.RejectionReason)
-               .HasMaxLength(500)
-               .IsUnicode(false);
-            entity.Property(e => e.ViolationType)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-
-            entity.HasOne(d => d.PlateNumberNavigation).WithMany(p => p.Reports)
-                .HasPrincipalKey(p => p.PlateNumber)
-                .HasForeignKey(d => d.PlateNumber)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Reports__PlateNu__5CD6CB2B");
+            entity.Property(e => e.ViolationTypeId).HasColumnName("ViolationTypeID");
 
             entity.HasOne(d => d.ProcessedByNavigation).WithMany(p => p.ReportProcessedByNavigations)
                 .HasForeignKey(d => d.ProcessedBy)
@@ -114,6 +107,10 @@ public partial class ProjectPrn212Context : DbContext
             entity.HasOne(d => d.Reporter).WithMany(p => p.ReportReporters)
                 .HasForeignKey(d => d.ReporterId)
                 .HasConstraintName("FK__Reports__Reporte__5AEE82B9");
+
+            entity.HasOne(d => d.ViolationType).WithMany(p => p.Reports)
+                .HasForeignKey(d => d.ViolationTypeId)
+                .HasConstraintName("FK_Reports_ViolationTypes");
         });
 
         modelBuilder.Entity<TrustedDevice>(entity =>
@@ -191,7 +188,6 @@ public partial class ProjectPrn212Context : DbContext
             entity.HasKey(e => e.ViolationId).HasName("PK__Violatio__18B6DC2860BA0C3C");
 
             entity.Property(e => e.ViolationId).HasColumnName("ViolationID");
-            entity.Property(e => e.FineAmount).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.FineDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -200,22 +196,40 @@ public partial class ProjectPrn212Context : DbContext
                 .HasMaxLength(15)
                 .IsUnicode(false);
             entity.Property(e => e.ReportId).HasColumnName("ReportID");
+            entity.Property(e => e.ViolationTypeId).HasColumnName("ViolationTypeID");
             entity.Property(e => e.ViolatorId).HasColumnName("ViolatorID");
 
-            entity.HasOne(d => d.PlateNumberNavigation).WithMany(p => p.Violations)
-                .HasPrincipalKey(p => p.PlateNumber)
-                .HasForeignKey(d => d.PlateNumber)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Violation__Plate__6E01572D");
+            entity.HasOne(d => d.PlateNumberNavigation)
+     .WithMany(p => p.Violations)
+     .HasPrincipalKey(p => p.PlateNumber) // ✅ Chỉ định đúng khóa chính phụ của `Vehicle`
+     .HasForeignKey(d => d.PlateNumber) // ✅ Chỉ định rõ `PlateNumber` là FK
+     .IsRequired(false) // ✅ Cho phép null nếu cần
+     .OnDelete(DeleteBehavior.Restrict) // ✅ Tránh lỗi xóa
+     .HasConstraintName("FK_Violations_Vehicles");
 
             entity.HasOne(d => d.Report).WithMany(p => p.Violations)
                 .HasForeignKey(d => d.ReportId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Violation__Repor__6D0D32F4");
 
+            entity.HasOne(d => d.ViolationType).WithMany(p => p.Violations)
+                .HasForeignKey(d => d.ViolationTypeId)
+                .HasConstraintName("FK_Violations_ViolationTypes");
+
             entity.HasOne(d => d.Violator).WithMany(p => p.Violations)
                 .HasForeignKey(d => d.ViolatorId)
                 .HasConstraintName("FK__Violation__Viola__6EF57B66");
+        });
+
+        modelBuilder.Entity<ViolationType>(entity =>
+        {
+            entity.HasKey(e => e.ViolationTypeId).HasName("PK__Violatio__3B1A4D7DB7C12B7C");
+
+            entity.HasIndex(e => e.ViolationName, "UQ__Violatio__B103E1EE97EC48BF").IsUnique();
+
+            entity.Property(e => e.ViolationTypeId).HasColumnName("ViolationTypeID");
+            entity.Property(e => e.FineAmount).HasColumnType("decimal(10, 2)");
+            entity.Property(e => e.ViolationName).HasMaxLength(50);
         });
 
         OnModelCreatingPartial(modelBuilder);

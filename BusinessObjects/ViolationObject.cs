@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using DataAccess.Repository;
 using DataAccess.Repository.Interface;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,11 @@ namespace BusinessObjects
     public class ViolationObject
     {
         private readonly IViolationRepository _violationRepository;
-
-        public ViolationObject(IViolationRepository violationRepository)
+        private readonly ProjectPrn212Context _context;
+        public ViolationObject()
         {
-            _violationRepository = violationRepository;
+            _context = new ProjectPrn212Context();
+            _violationRepository = new ViolationRepository(_context);
         }
         public List<Report> GetViolationReports()
         {
@@ -23,6 +25,14 @@ namespace BusinessObjects
         public Dictionary<string, int> GetReportStatistics()
         {
             return _violationRepository.GetReportStatistics();
+        }
+        public List<Violation> GetViolationsByType(int violationTypeId)
+        {
+            return _violationRepository.GetViolationsByType(violationTypeId);
+        }
+        public async Task<List<ViolationType>> GetAllViolationTypes()
+        {
+            return await _violationRepository.GetAllViolationTypes();
         }
     }
 }

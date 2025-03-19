@@ -13,16 +13,19 @@ namespace ProjectPRN212
         private string _videoPath;
         private readonly int _currentUserId;
         private readonly ReportObjects _reportObjects;
+        private readonly ViolationObject _violationObject;
 
         public SendFeedback(int userId)
         {
             InitializeComponent();
             _currentUserId = userId;
             _reportObjects = new ReportObjects();
+            _violationObject = new ViolationObject();
 
             btnUploadImage.Click += BtnUploadImage_Click;
             btnUploadVideo.Click += BtnUploadVideo_Click;
             btnSubmit.Click += BtnSubmit_Click;
+            LoadViolationTypes();
         }
         private void BtnUploadImage_Click(object sender, RoutedEventArgs e)
         {
@@ -33,7 +36,7 @@ namespace ProjectPRN212
             };
 
             if (openFileDialog.ShowDialog() == true)
-            {   
+            {
                 _imagePath = openFileDialog.FileName;
                 txtImageName.Text = Path.GetFileName(_imagePath);
             }
@@ -73,15 +76,14 @@ namespace ProjectPRN212
                 var report = new Report
                 {
                     ReporterId = _currentUserId,
-                    ViolationType = ((ComboBoxItem)cbViolationType.SelectedItem).Content.ToString(),
+                    //ViolationType = ((ComboBoxItem)cbViolationType.SelectedItem).Content.ToString(),
                     Description = txtDescription.Text,
                     PlateNumber = txtPlateNumber.Text,
                     ImageUrl = imageUrl,
                     VideoUrl = videoUrl,
                     Location = txtLocation.Text,
                     ReportDate = DateTime.Now,
-                    Status = "Pending",
-                    ProcessedBy = _currentUserId
+                    Status = "Pending"
                 };
                 bool result = await _reportObjects.AddReport(report);
                 if (result)
@@ -94,11 +96,20 @@ namespace ProjectPRN212
                     MessageBox.Show("Không thể gửi phản ánh. Vui lòng thử lại!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-                catch (Exception ex)
+            catch (Exception ex)
             {
                 var errorMessage = ex.InnerException?.Message ?? ex.Message;
                 MessageBox.Show($"Đã xảy ra lỗi: {errorMessage}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        private async void LoadViolationTypes()
+        {
+            var violations = await _violationObject.GetAllViolationTypes();
+            cbViolationType.ItemsSource = violations;
+            cbViolationType.DisplayMemberPath = "ViolationName";
+            cbViolationType.SelectedValuePath = "ViolationTypeId";
+        }
+
     }
 }

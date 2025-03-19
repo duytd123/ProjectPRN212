@@ -89,8 +89,8 @@ namespace ProjectPRN212
                 var report = _notifyObject.GetReportByNotificationId(selectedNotification.NotificationId);
                 if (report != null)
                 {
-                    var detailsWindow = new NotificationDetailsWindow(report);
-                    detailsWindow.ShowDialog();
+                    //var detailsWindow = new NotificationDetailsWindow(report);
+                    //detailsWindow.ShowDialog();
                 }
                 else
                 {

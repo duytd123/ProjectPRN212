@@ -1,14 +1,9 @@
 ﻿using BusinessObjects;
 using DataAccess.Models;
-using DataAccess.Repository;
-using DataAccess.Repository.Interface;
 using System.Windows;
 
 namespace ProjectPRN212
 {
-    /// <summary>
-    /// Interaction logic for ReportWindow.xaml
-    /// </summary>
     public partial class ReportWindow : Window
     {
         private readonly ViolationObject _violationObject;
@@ -17,9 +12,7 @@ namespace ProjectPRN212
         public ReportWindow(PoliceObject policeObject, int policeUserId)
         {
             InitializeComponent();
-
-            IViolationRepository violationRepository = new ViolationRepository(new ProjectPrn212Context());
-            _violationObject = new ViolationObject(violationRepository);
+            _violationObject = new ViolationObject();
             _policeObject = policeObject;
             _policeUserId = policeUserId;
             LoadReportData();
@@ -51,7 +44,7 @@ namespace ProjectPRN212
 
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
-            PoliceWindow policeWindow = new PoliceWindow(_policeObject,_policeUserId);
+            PoliceWindow policeWindow = new PoliceWindow(_policeObject, _policeUserId);
             policeWindow.Show();
             this.Close();
         }
