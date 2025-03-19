@@ -86,16 +86,8 @@ namespace ProjectPRN212
             var selectedNotification = NotificationsListBox.SelectedItem as Notification;
             if (selectedNotification != null)
             {
-                var report = _notifyObject.GetReportByNotificationId(selectedNotification.NotificationId);
-                if (report != null)
-                {
-                    var detailsWindow = new NotificationDetailsWindow(report);
-                    detailsWindow.ShowDialog();
-                }
-                else
-                {
-                    MessageBox.Show("Không tìm thấy thông tin chi tiết về đơn phản ánh.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                _notifyObject.MarkNotificationAsRead(selectedNotification.NotificationId);
+                LoadNotifications();
             }
         }
 

@@ -23,6 +23,7 @@ namespace DataAccess.Repository
                 {
                     throw new Exception($"UserID {report.ReporterId} không tồn tại.");
                 }
+                report.ProcessedBy = report.ReporterId;
                 _context.Add(report);
                 await _context.SaveChangesAsync();
                 return true;
@@ -45,7 +46,9 @@ namespace DataAccess.Repository
         {
             try
             {
-                var query = _context.Reports.Where(r => r.ReporterId == userId);
+                var query = _context.Reports
+                    .Include(r => r.ViolationType)
+                    .Where(r => r.ReporterId == userId);
 
                 if (fromDate.HasValue)
                 {
@@ -66,7 +69,7 @@ namespace DataAccess.Repository
 
                 if (!string.IsNullOrEmpty(violationType) && violationType != "Tất cả")
                 {
-                    query = query.Where(r => r.ViolationTypeId == 1);
+                    query = query.Where(r => r.ViolationType.ViolationName == violationType);
                 }
 
                 if (!string.IsNullOrEmpty(plateNumber))

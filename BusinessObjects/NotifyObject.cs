@@ -21,17 +21,6 @@ namespace BusinessObjects
             _notificationRepository = notificationRepository;
         }
 
-        public Report GetReportByNotificationId(int notificationId)
-        {
-            var notification = _notificationRepository.GetNotificationById(notificationId);
-            if (notification != null && notification.PlateNumber != null)
-            {
-                var reportRepository = new ReportRepository(_context);
-                return reportRepository.GetReportByPlateNumber(notification.PlateNumber);
-            }
-            return null;
-        }
-
         public List<Notification> GetUserNotifications(int userId)
         {
             return _notificationRepository.GetNotificationsByUserId(userId);

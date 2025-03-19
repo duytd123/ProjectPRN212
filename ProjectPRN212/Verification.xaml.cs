@@ -25,7 +25,7 @@ namespace ProjectPRN212
             _policeUserId = policeUserId;
 
             PlateNumberTextBlock.Text = _selectedReport.PlateNumber;
-           // ViolationTypeTextBlock.Text = _selectedReport.ViolationType;
+            ViolationTypeTextBlock.Text = _selectedReport.ViolationType?.ViolationName ?? "N/A";
             DescriptionTextBlock.Text = _selectedReport.Description;
             LocationTextBlock.Text = _selectedReport.Location;
             ReportDateTextBlock.Text = _selectedReport.ReportDate?.ToString("yyyy-MM-dd HH:mm") ?? "N/A";
@@ -226,7 +226,7 @@ namespace ProjectPRN212
 
 
         private void Timer_Tick(object sender, EventArgs e)
-        {
+        {   
             if (ViolationVideo.NaturalDuration.HasTimeSpan)
             {
                 VideoSlider.Maximum = ViolationVideo.NaturalDuration.TimeSpan.TotalSeconds;

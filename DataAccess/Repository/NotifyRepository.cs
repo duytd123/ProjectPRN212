@@ -40,7 +40,7 @@ namespace DataAccess.Repository
 
         public void MarkAsRead(int notificationId)
         {
-            var notification = _context.Notifications.Find(notificationId);
+            var notification = _context.Notifications.FirstOrDefault(n => n.NotificationId == notificationId);
             if (notification != null)
             {
                 notification.IsRead = true;

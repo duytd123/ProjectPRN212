@@ -36,7 +36,7 @@ namespace ProjectPRN212
             };
 
             if (openFileDialog.ShowDialog() == true)
-            {   
+            {
                 _imagePath = openFileDialog.FileName;
                 txtImageName.Text = Path.GetFileName(_imagePath);
             }
@@ -68,15 +68,16 @@ namespace ProjectPRN212
                     return;
                 }
 
-                // Upload files
+                var selectedViolationType = (ViolationType)cbViolationType.SelectedItem;
+                int violationTypeId = selectedViolationType.ViolationTypeId;
+
                 string imageUrl = _reportObjects.UploadFile(_imagePath);
                 string videoUrl = _reportObjects.UploadFile(_videoPath);
 
-                // Create report object
                 var report = new Report
                 {
                     ReporterId = _currentUserId,
-                    //ViolationType = ((ComboBoxItem)cbViolationType.SelectedItem).Content.ToString(),
+                    ViolationTypeId = violationTypeId,
                     Description = txtDescription.Text,
                     PlateNumber = txtPlateNumber.Text,
                     ImageUrl = imageUrl,
@@ -85,6 +86,7 @@ namespace ProjectPRN212
                     ReportDate = DateTime.Now,
                     Status = "Pending"
                 };
+
                 bool result = await _reportObjects.AddReport(report);
                 if (result)
                 {
@@ -96,14 +98,10 @@ namespace ProjectPRN212
                     MessageBox.Show("Không thể gửi phản ánh. Vui lòng thử lại!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-                catch (Exception ex)
+            catch (Exception ex)
             {
                 var errorMessage = ex.InnerException?.Message ?? ex.Message;
-                MessageBox.Show($"Đã xảy ra lỗi: {errorMessage}",
-                    "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-
-                // Log lỗi
-                Console.WriteLine($"Exception details: {ex}");
+                MessageBox.Show($"Đã xảy ra lỗi: {errorMessage}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -114,6 +112,5 @@ namespace ProjectPRN212
             cbViolationType.DisplayMemberPath = "ViolationName";
             cbViolationType.SelectedValuePath = "ViolationTypeId";
         }
-
     }
 }

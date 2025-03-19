@@ -23,6 +23,7 @@ namespace DataAccess.Repository
             return _context.Reports
                 .Include(r => r.Reporter)
                 .Include(r => r.ProcessedByNavigation)
+                .Include(r => r.ViolationType)
                 .Include(r => r.Violations)
                 .ToList();
         }
@@ -102,7 +103,7 @@ namespace DataAccess.Repository
         {
             return _context.Vehicles
                            .Where(v => v.PlateNumber == plateNumber)
-                           .Select(v => v.Owner) 
+                           .Select(v => v.Owner)
                            .FirstOrDefault();
         }
 
@@ -116,12 +117,36 @@ namespace DataAccess.Repository
                 throw new ArgumentException($"Invalid status: {status}. Allowed values: {string.Join(", ", validStatuses)}");
             }
 
-            var report = _context.Reports.FirstOrDefault(r => r.ReportId == reportId);
+            var report = _context.Reports
+                .Include(r => r.ViolationType)
+                .FirstOrDefault(r => r.ReportId == reportId);
+
             if (report != null)
             {
                 report.Status = status;
                 report.ProcessedBy = processedBy;
-                report.RejectionReason = rejectionReason; 
+                report.RejectionReason = rejectionReason;
+
+                if (status == "Approved")
+                {
+                    var vehicleOwner = _context.Vehicles
+                        .Where(v => v.PlateNumber == report.PlateNumber)
+                        .Select(v => v.Owner)
+                        .FirstOrDefault();
+
+                    var violation = new Violation
+                    {
+                        ReportId = report.ReportId,
+                        PlateNumber = report.PlateNumber,
+                        ViolatorId = vehicleOwner?.UserId,
+                        ViolationTypeId = report.ViolationTypeId,
+                        FineDate = DateTime.Now,
+                        PaidStatus = false
+                    };
+
+                    _context.Violations.Add(violation);
+                }
+
                 _context.SaveChanges();
             }
         }
@@ -134,7 +159,7 @@ namespace DataAccess.Repository
                                        .FirstOrDefault();
 
             return _context.Notifications
-                           .Any(n => n.PlateNumber == plateNumber );
+                           .Any(n => n.PlateNumber == plateNumber);
         }
 
         //public Violation? GetViolationByReportId(int reportId)
