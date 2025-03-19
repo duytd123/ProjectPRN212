@@ -98,7 +98,7 @@ namespace ProjectPRN212
                 _policeObject.VerifyAndProcessReport(_selectedReport.ReportId, "Approved", _policeUserId);
 
                 string violaterMessage = $"Xe biển số {_selectedReport.PlateNumber} đã bị phản ánh.";
-                //_policeObject.NotifyViolator(violator.UserId, violaterMessage, _selectedReport.PlateNumber, fineAmount, dueDate);
+                _policeObject.NotifyViolator(violator.UserId, violaterMessage, _selectedReport.PlateNumber, fineAmount, dueDate);
 
                 string reporterMessage = $"Đơn phản ánh của bạn về xe biển số {_selectedReport.PlateNumber} đã được duyệt.";
                 _notifyObject.AddNotification(_selectedReport.ReporterId, reporterMessage, _selectedReport.PlateNumber);

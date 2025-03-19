@@ -1,23 +1,21 @@
 ﻿using DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repository.Interface
 {
     public interface IPoliceRepository
     {
         List<Report> GetAllReports();
+        int? GetPoliceUserId(string email);
         void UpdateReportStatus(int reportId, string status, int processedBy);
-        void SendNotification(int userId, string message, string plateNumber, decimal? fineAmount, DateTime? dueDate); 
-        void VerifyAndProcessReport(int reportId, string status, int processedBy, string? rejectionReason = null);
+        void SendNotification(int userId, string message, string plateNumber, decimal? fineAmount, DateTime? dueDate);
         User? GetUserByPlateNumber(string plateNumber);
+        void VerifyAndProcessReport(int reportId, string status, int processedBy, string? rejectionReason = null);
         bool HasNotificationBeenSent(int reportId);
         Violation? GetViolationByReportId(int reportId);
-
         bool DoesVehicleExist(string plateNumber);
-        int? GetPoliceUserId(string email);
+        void AddViolation(Violation violation);
+        Report GetReportById(int reportId);
+        List<string> GetUserVehiclePlateNumbers(int userId);
+        List<Report> GetViolationsByUserId(int userId);
     }
 }

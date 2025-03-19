@@ -29,8 +29,11 @@ public partial class Report
 
     public string? RejectionReason { get; set; }
 
+    public int? ResponseCount { get; set; } = 0;
+
     public virtual Vehicle PlateNumberNavigation { get; set; } = null!;
 
+    public decimal? FineAmount { get; set; }
 
     public virtual User? ProcessedByNavigation { get; set; }
 
