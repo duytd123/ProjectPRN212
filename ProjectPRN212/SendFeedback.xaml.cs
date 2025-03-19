@@ -68,15 +68,16 @@ namespace ProjectPRN212
                     return;
                 }
 
-                // Upload files
+                var selectedViolationType = (ViolationType)cbViolationType.SelectedItem;
+                int violationTypeId = selectedViolationType.ViolationTypeId;
+
                 string imageUrl = _reportObjects.UploadFile(_imagePath);
                 string videoUrl = _reportObjects.UploadFile(_videoPath);
 
-                // Create report object
                 var report = new Report
                 {
                     ReporterId = _currentUserId,
-                    //ViolationType = ((ComboBoxItem)cbViolationType.SelectedItem).Content.ToString(),
+                    ViolationTypeId = violationTypeId,
                     Description = txtDescription.Text,
                     PlateNumber = txtPlateNumber.Text,
                     ImageUrl = imageUrl,
@@ -85,6 +86,7 @@ namespace ProjectPRN212
                     ReportDate = DateTime.Now,
                     Status = "Pending"
                 };
+
                 bool result = await _reportObjects.AddReport(report);
                 if (result)
                 {
@@ -110,6 +112,5 @@ namespace ProjectPRN212
             cbViolationType.DisplayMemberPath = "ViolationName";
             cbViolationType.SelectedValuePath = "ViolationTypeId";
         }
-
     }
 }
