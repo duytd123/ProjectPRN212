@@ -5,7 +5,6 @@ namespace DataAccess.Repository.Interface
     public interface IPoliceRepository
     {
         List<Report> GetAllReports();
-        void UpdateReportStatus(int reportId, string status, int processedBy);
         void SendNotification(int userId, string message, string plateNumber, decimal? fineAmount, DateTime? dueDate);
         void VerifyAndProcessReport(int reportId, string status, int processedBy, string? rejectionReason = null);
         User? GetUserByPlateNumber(string plateNumber);
@@ -14,5 +13,6 @@ namespace DataAccess.Repository.Interface
 
         bool DoesVehicleExist(string plateNumber);
         int? GetPoliceUserId(string email);
+        void ProcessResponse(int violationId, bool isApproved);
     }
 }

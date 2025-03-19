@@ -125,7 +125,8 @@ namespace ProjectPRN212
 
         private void ViewViolationDetails_Click(object sender, RoutedEventArgs e)
         {
-
+            UserViolationWindow userViolation = new UserViolationWindow(currentUserId);
+            userViolation.ShowDialog();
         }
 
         private void PayFineOnline_Click(object sender, RoutedEventArgs e)

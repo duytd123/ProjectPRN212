@@ -41,6 +41,11 @@ namespace ProjectPRN212
                 foreach (var report in AllReports)
                 {
                     report.NotificationSent = _policeObject.HasNotificationBeenSent(report.ReportId);
+                    var violation = _policeObject.GetViolationByReportId(report.ReportId);
+                    if (violation != null && !string.IsNullOrEmpty(violation.Response))
+                    {
+                        report.Status = "Pending";
+                    }
                 }
 
                 ReportsDataGrid.ItemsSource = AllReports;
@@ -57,15 +62,15 @@ namespace ProjectPRN212
         {
             if (ReportsDataGrid.SelectedItem is Report selectedReport)
             {
-                if (selectedReport.NotificationSent)
+                var violation = _policeObject.GetViolationByReportId(selectedReport.ReportId);
+                if (violation != null && !string.IsNullOrEmpty(violation.Response))
                 {
-                    MessageBox.Show("Biên bản này đã được thông báo và không thể xác minh lại.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
+                    selectedReport.Status = "Pending";
+                    _policeObject.VerifyAndProcessReport(selectedReport.ReportId, "Pending", _policeUserId);
                 }
-
-                Verification verificationWindow = new Verification(selectedReport, _policeObject,_policeUserId);
-                verificationWindow.Show();
-                this.Close();
+                Verification verificationWindow = new Verification(selectedReport, _policeObject, _policeUserId);
+                verificationWindow.ShowDialog();
+                LoadReports();
             }
             else
             {
@@ -80,11 +85,6 @@ namespace ProjectPRN212
                 if (selectedReport.Status != "Approved")
                 {
                     MessageBox.Show("Bạn chỉ có thể gửi thông báo cho biên bản đã được phê duyệt.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-                if (selectedReport.NotificationSent)
-                {
-                    MessageBox.Show("Thông báo đã được gửi cho biên bản này.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
                 PoliceNotification policeNotification = new PoliceNotification(selectedReport, _policeObject, _policeUserId);

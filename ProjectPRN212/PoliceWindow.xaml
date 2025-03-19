@@ -49,11 +49,21 @@
                       FontSize="14">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="" Binding="{Binding ReportId}" Width="30"/>
-                    <DataGridTextColumn Header="👤 Tên người tạo" Binding="{Binding Reporter.FullName}" Width="150"/>
-                    <DataGridTextColumn Header="🚗 Biển số xe" Binding="{Binding PlateNumber}" Width="120"/>
+                    <DataGridTextColumn Header="👤 Tên người tạo" Binding="{Binding Reporter.FullName}" Width="120"/>
+                    <DataGridTextColumn Header="🚗 Biển số xe" Binding="{Binding PlateNumber}" Width="100"/>
                     <DataGridTextColumn Header="📅 Ngày báo cáo" Binding="{Binding ReportDate, StringFormat=\{0:dd/MM/yyyy\}}" Width="120"/>
                     <DataGridTextColumn Header="📝 Tình trạng đơn" Binding="{Binding Status}" Width="130"/>
-                    <DataGridTemplateColumn Header="📢 Thông báo" Width="150">
+                    <DataGridTemplateColumn Header="📝 Phản hồi" Width="120">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Violations[0].Response}" 
+                       Foreground="DarkBlue" 
+                       TextWrapping="Wrap" 
+                       MaxWidth="180"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="📢 Thông báo" Width="120">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding NotificationSent, Converter={StaticResource StatusConverter}, ConverterParameter=Notification}"
@@ -97,6 +107,4 @@
         </StackPanel>
         <Button Name="btnLogout" Content="Đăng xuất" Grid.Row="2" HorizontalAlignment="Left"  Click="btnLogout_Click" Width="71" Height="40" Margin="10" Background="DarkGray" Foreground="Black" FontWeight="Bold" />
     </Grid>
-
 </Window>
-    

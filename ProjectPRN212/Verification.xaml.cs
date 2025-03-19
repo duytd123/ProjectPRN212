@@ -1,11 +1,8 @@
 ﻿using BusinessObjects;
 using DataAccess.Models;
-using DataAccess.Repository.Interface;
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -17,6 +14,7 @@ namespace ProjectPRN212
         private Report _selectedReport;
         private PoliceObject _policeObject;
         private int _policeUserId;
+
         public Verification(Report report, PoliceObject policeObject, int policeUserId)
         {
             InitializeComponent();
@@ -24,11 +22,22 @@ namespace ProjectPRN212
             _policeObject = policeObject;
             _policeUserId = policeUserId;
 
+            LoadReportDetails();
+        }
+
+        private void LoadReportDetails()
+        {
             PlateNumberTextBlock.Text = _selectedReport.PlateNumber;
             ViolationTypeTextBlock.Text = _selectedReport.ViolationType?.ViolationName ?? "N/A";
             DescriptionTextBlock.Text = _selectedReport.Description;
             LocationTextBlock.Text = _selectedReport.Location;
             ReportDateTextBlock.Text = _selectedReport.ReportDate?.ToString("yyyy-MM-dd HH:mm") ?? "N/A";
+
+            var violation = _policeObject.GetViolationByReportId(_selectedReport.ReportId);
+            if (violation != null)
+            {
+                ResponseTextBlock.Text = violation.Response ?? "Không có phản hồi.";
+            }
 
             LoadViolationImage();
             LoadViolationVideo();
@@ -60,7 +69,6 @@ namespace ProjectPRN212
                     if (!System.IO.File.Exists(videoPath))
                     {
                         MessageBox.Show($"Không tìm thấy tệp video: {videoPath}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-
                     }
                     else
                     {
@@ -74,17 +82,14 @@ namespace ProjectPRN212
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Lỗi khi tải video: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-
                 }
             }
         }
-
 
         private void UpdateReportStatus(string status)
         {
             try
             {
-
                 if (!IsPlateNumberValid(_selectedReport.PlateNumber))
                 {
                     string rejectionReason = "Không tìm thấy biển số phù hợp.";
@@ -99,17 +104,15 @@ namespace ProjectPRN212
                     RejectionReasonTextBlock.Text = $"Lý do: {rejectionReason}";
                     RejectionReasonTextBlock.Visibility = Visibility.Visible;
 
-                    MessageBox.Show($"Báo cáo đã bị từ chối do không tìm thấy biển số phù hợp!",
-                        "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show($"Báo cáo đã bị từ chối do không tìm thấy biển số phù hợp!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
                 _policeObject.VerifyAndProcessReport(_selectedReport.ReportId, status, _selectedReport.ProcessedBy ?? 0);
                 MessageBox.Show($"Báo cáo đã được {status}!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
 
-
                 StatusTextBlock.Text = status.ToUpper();
-                StatusTextBlock.Foreground = Brushes.Red;
+                StatusTextBlock.Foreground = Brushes.Green;
 
                 _selectedReport.Status = status;
 
@@ -140,9 +143,14 @@ namespace ProjectPRN212
             if (result == MessageBoxResult.Yes)
             {
                 UpdateReportStatus("Approved");
+                var violation = _policeObject.GetViolationByReportId(_selectedReport.ReportId);
+                if (violation != null)
+                {
+                    string message = $"Báo cáo vi phạm biển số xe {violation.PlateNumber} được gửi tới bạn.";
+                    _policeObject.NotifyViolator(violation.ViolatorId ?? 0, message, violation.PlateNumber, null, null);
+                }
             }
         }
-
 
         private void RejectButton_Click(object sender, RoutedEventArgs e)
         {
@@ -162,25 +170,28 @@ namespace ProjectPRN212
                     _selectedReport.RejectionReason = reason;
                     _policeObject.VerifyAndProcessReport(_selectedReport.ReportId, "Rejected", _selectedReport.ProcessedBy ?? 0, reason);
 
-                    MessageBox.Show("Báo cáo đã bị từ chối!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                    var violation = _policeObject.GetViolationByReportId(_selectedReport.ReportId);
+                    if (violation != null)
+                    {
+                        string message = $"Phản hồi của bạn về báo cáo vi phạm biển số {violation.PlateNumber} đã bị từ chối. Lý do: {reason}";
+                        _policeObject.NotifyViolator(violation.ViolatorId ?? 0, message, violation.PlateNumber, null, null);
+                    }
 
+                    MessageBox.Show("Báo cáo đã bị từ chối!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
                     StatusTextBlock.Text = "REJECTED";
                     StatusTextBlock.Foreground = Brushes.Red;
-                    RejectionReasonTextBlock.Text = $"reson:  {reason}";
+                    RejectionReasonTextBlock.Text = $"Lý do: {reason}";
                     RejectionReasonTextBlock.Visibility = Visibility.Visible;
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Lỗi khi từ chối báo cáo: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-
                 }
             }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            PoliceWindow policeWindow = new PoliceWindow(_policeObject,_policeUserId);
-            policeWindow.Show();
             this.Close();
         }
 
@@ -209,7 +220,7 @@ namespace ProjectPRN212
 
             if (_selectedReport.Status == "Rejected" && !string.IsNullOrEmpty(_selectedReport.RejectionReason))
             {
-                RejectionReasonTextBlock.Text = $"Lý do:{_selectedReport.RejectionReason}";
+                RejectionReasonTextBlock.Text = $"Lý do: {_selectedReport.RejectionReason}";
                 RejectionReasonTextBlock.Visibility = Visibility.Visible;
             }
             else
@@ -224,9 +235,8 @@ namespace ProjectPRN212
             timer.Start();
         }
 
-
         private void Timer_Tick(object sender, EventArgs e)
-        {   
+        {
             if (ViolationVideo.NaturalDuration.HasTimeSpan)
             {
                 VideoSlider.Maximum = ViolationVideo.NaturalDuration.TimeSpan.TotalSeconds;
@@ -241,6 +251,5 @@ namespace ProjectPRN212
                 ViolationVideo.Position = TimeSpan.FromSeconds(VideoSlider.Value);
             }
         }
-
     }
 }

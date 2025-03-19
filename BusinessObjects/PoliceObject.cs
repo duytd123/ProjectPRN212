@@ -1,11 +1,7 @@
 ﻿using DataAccess.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DataAccess.Repository.Interface;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace BusinessObjects
 {
@@ -28,19 +24,14 @@ namespace BusinessObjects
             return _policeRepository.GetPoliceUserId(email);
         }
 
-        public void VerifyAndProcessReport(int reportId, string status, int processedBy)
+        public void VerifyAndProcessReport(int reportId, string status, int processedBy, string? rejectionReason = null)
         {
-            _policeRepository.UpdateReportStatus(reportId, status, processedBy);
+            _policeRepository.VerifyAndProcessReport(reportId, status, processedBy, rejectionReason);
         }
 
         public void NotifyViolator(int userId, string message, string plateNumber, decimal? fineAmount, DateTime? dueDate)
         {
             _policeRepository.SendNotification(userId, message, plateNumber, fineAmount, dueDate);
-        }
-
-        public void VerifyAndProcessReport(int reportId, string status, int processedBy, string? rejectionReason = null)
-        {
-            _policeRepository.VerifyAndProcessReport(reportId, status, processedBy, rejectionReason);
         }
 
         public User? GetUserByPlateNumber(string plateNumber)
@@ -57,10 +48,15 @@ namespace BusinessObjects
         {
             return _policeRepository.GetViolationByReportId(reportId);
         }
+
         public bool DoesVehicleExist(string plateNumber)
         {
             return _policeRepository.DoesVehicleExist(plateNumber);
         }
 
+        public void ProcessResponse(int violationId, bool isApproved)
+        {
+            _policeRepository.ProcessResponse(violationId, isApproved);
+        }
     }
 }

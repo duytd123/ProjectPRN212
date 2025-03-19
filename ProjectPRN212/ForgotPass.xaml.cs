@@ -51,7 +51,7 @@ namespace ProjectPRN212
             }
             catch(Exception ex)
             {
-                
+                MessageBox.Show(ex.Message);
             }
         }
         private string GenerateRandomPassword()

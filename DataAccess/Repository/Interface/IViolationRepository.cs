@@ -9,10 +9,17 @@ namespace DataAccess.Repository.Interface
 {
     public interface IViolationRepository
     {
-        List<Report> GetViolationReports(); 
+        List<Report> GetViolationReports();
         Dictionary<string, int> GetReportStatistics();
         List<Violation> GetViolationsByType(int violationTypeId);
 
         Task<List<ViolationType>> GetAllViolationTypes();
+        List<Violation> GetViolationsByUserId(int userId);
+
+        void UpdateViolation(Violation violation);
+
+        Violation? GetViolationById(int violationId);
+
+        void SubmitResponse(int violationId, string response);
     }
 }
