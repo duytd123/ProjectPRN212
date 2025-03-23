@@ -1,11 +1,6 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
@@ -55,14 +50,36 @@ namespace DataAccess.Repository
                 .FirstOrDefault(v => v.ViolationId == violationId);
         }
 
+        public List<Violation> GetViolationsByUserId(int userId)
+        {
+            return _context.Violations
+                .Include(v => v.ViolationType)
+                .Include(v => v.Report)
+                .Where(v => v.ViolatorId == userId)
+                .ToList();
+        }
+
         public void UpdateViolationResponse(int violationId, string response)
         {
-            var violation = _context.Violations.FirstOrDefault(v => v.ViolationId == violationId);
+            var violation = _context.Violations
+                .Include(v => v.Report)
+                .FirstOrDefault(v => v.ViolationId == violationId);
+
             if (violation != null)
             {
+                if (string.IsNullOrEmpty(response))
+                {
+                    return;
+                }
+
                 violation.Response = response;
                 violation.ResponseCount += 1;
-                violation.Report.Status = "Pending"; // Chuyển trạng thái đơn về Pending
+
+                if (violation.Report != null)
+                {
+                    violation.Report.Status = "Pending";
+                }
+
                 _context.SaveChanges();
             }
         }

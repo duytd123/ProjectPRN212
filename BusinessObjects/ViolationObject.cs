@@ -43,5 +43,9 @@ namespace BusinessObjects
         {
             _violationRepository.UpdateViolationResponse(violationId, response);
         }
+        public List<Violation> GetViolationsByUserId(int userId)
+        {
+            return _violationRepository.GetViolationsByUserId(userId);
+        }
     }
 }

@@ -1,5 +1,5 @@
 {
-  "SessionTimeout": 1,
+  "SessionTimeout": 30,
   "EnableLogging": false,
   "EnableTwoFactorAuth": false,
   "EnableAutoLogout": true

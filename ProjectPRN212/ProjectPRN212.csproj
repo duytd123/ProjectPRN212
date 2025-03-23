@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\back.png" />
     <None Remove="Assets\bell.png" />
     <None Remove="Assets\feedback.png" />
     <None Remove="Assets\logout.png" />
@@ -17,6 +18,12 @@
     <None Remove="Assets\status.png" />
     <None Remove="Assets\user.png" />
     <None Remove="Assets\violation.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\back.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>

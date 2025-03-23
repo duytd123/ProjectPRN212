@@ -14,6 +14,8 @@ public partial class Violation
 
     public DateTime? FineDate { get; set; }
 
+    public decimal? FineAmount { get; set; }
+
     public bool PaidStatus { get; set; }
 
     public string Response { get; set; }
