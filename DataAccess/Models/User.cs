@@ -16,9 +16,13 @@ public partial class User
 
     public string Phone { get; set; } = null!;
 
+    public decimal? Balance { get; set; }
+
     public string? Address { get; set; }
 
     public bool? IsDisabled { get; set; }
+
+    public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 

@@ -18,14 +18,12 @@ namespace DataAccess.Repository
             _context = context;
         }
 
-        public List<Report> GetAllReports()
+        public IQueryable<Report> GetAllReports()
         {
             return _context.Reports
                 .Include(r => r.Reporter)
                 .Include(r => r.ProcessedByNavigation)
-                .Include(r => r.ViolationType)
-                .Include(r => r.Violations)
-                .ToList();
+                .Include(r => r.Violations);
         }
 
         public int? GetPoliceUserId(string email)
@@ -35,6 +33,7 @@ namespace DataAccess.Repository
                            .Select(u => u.UserId)
                            .FirstOrDefault();
         }
+
         public void UpdateReportStatus(int reportId, string status, int processedBy)
         {
             var validStatuses = new List<string> { "Pending", "Approved", "Rejected" };
@@ -44,40 +43,46 @@ namespace DataAccess.Repository
                 throw new ArgumentException($"Invalid status: {status}. Allowed values: {string.Join(", ", validStatuses)}");
             }
 
-            var report = _context.Reports.FirstOrDefault(r => r.ReportId == reportId);
+            var report = _context.Reports
+                .Include(r => r.ViolationType)
+                .FirstOrDefault(r => r.ReportId == reportId);
 
             if (report != null)
             {
                 report.Status = status;
                 report.ProcessedBy = processedBy;
 
-                // Nếu trạng thái là "Approved", tự động tạo Violation
                 if (status == "Approved")
                 {
-                    // 🔍 Tìm chủ sở hữu xe dựa trên PlateNumber
                     var vehicleOwner = _context.Vehicles
-                                               .Where(v => v.PlateNumber == report.PlateNumber)
-                                               .Select(v => v.Owner)
-                                               .FirstOrDefault();
+                        .Where(v => v.PlateNumber == report.PlateNumber)
+                        .Select(v => v.Owner)
+                        .FirstOrDefault();
 
-                    // ⚠️ Nếu tìm thấy chủ xe thì gán vào ViolatorId
-                    var violation = new Violation
+                    var existingViolation = _context.Violations
+                        .FirstOrDefault(v => v.ReportId == reportId);
+
+                    if (existingViolation == null)
                     {
-                        ReportId = report.ReportId,
-                        PlateNumber = report.PlateNumber,
-                        ViolatorId = vehicleOwner?.UserId, // Gán ID của chủ xe (có thể null)
-                        ViolationTypeId = report.ViolationTypeId,
-                        FineDate = DateTime.Now,
-                        PaidStatus = false
-                    };
+                        var violation = new Violation
+                        {
+                            ReportId = report.ReportId,
+                            PlateNumber = report.PlateNumber,
+                            ViolatorId = vehicleOwner?.UserId,
+                            ViolationTypeId = report.ViolationTypeId,
+                            FineAmount = report.ViolationType?.FineAmount ?? 0,
+                            FineDate = DateTime.Now,
+                            PaidStatus = false,
+                            Response = ""
+                        };
 
-                    _context.Violations.Add(violation);
+                        _context.Violations.Add(violation);
+                    }
                 }
 
                 _context.SaveChanges();
             }
         }
-
 
         public void SendNotification(int userId, string message, string plateNumber, decimal? fineAmount, DateTime? dueDate)
         {
@@ -121,66 +126,75 @@ namespace DataAccess.Repository
                 .Include(r => r.ViolationType)
                 .FirstOrDefault(r => r.ReportId == reportId);
 
-            if (report != null)
+            if (status == "Approved")
             {
-                report.Status = status;
-                report.ProcessedBy = processedBy;
-                report.RejectionReason = rejectionReason;
+                var vehicleOwner = _context.Vehicles
+                    .Where(v => v.PlateNumber == report.PlateNumber)
+                    .Select(v => v.Owner)
+                    .FirstOrDefault();
 
-                if (status == "Approved")
+                decimal fineAmount = report.ViolationType?.FineAmount ?? 0;
+
+                var violation = new Violation
                 {
-                    var vehicleOwner = _context.Vehicles
-                        .Where(v => v.PlateNumber == report.PlateNumber)
-                        .Select(v => v.Owner)
-                        .FirstOrDefault();
+                    ReportId = report.ReportId,
+                    PlateNumber = report.PlateNumber,
+                    ViolatorId = vehicleOwner?.UserId,
+                    ViolationTypeId = report.ViolationTypeId,
+                    FineAmount = fineAmount,
+                    FineDate = DateTime.Now,
+                    PaidStatus = false
+                };
 
-                    var violation = new Violation
-                    {
-                        ReportId = report.ReportId,
-                        PlateNumber = report.PlateNumber,
-                        ViolatorId = vehicleOwner?.UserId,
-                        ViolationTypeId = report.ViolationTypeId,
-                        FineDate = DateTime.Now,
-                        PaidStatus = false
-                    };
-
-                    _context.Violations.Add(violation);
-                }
-
-                _context.SaveChanges();
+                _context.Violations.Add(violation);
             }
+            _context.SaveChanges();
         }
 
-        public bool HasNotificationBeenSent(int reportId)
-        {
-            var plateNumber = _context.Reports
-                                       .Where(r => r.ReportId == reportId)
-                                       .Select(r => r.PlateNumber)
-                                       .FirstOrDefault();
+    public bool HasNotificationBeenSent(int reportId)
+    {
+        var plateNumber = _context.Reports
+                                   .Where(r => r.ReportId == reportId)
+                                   .Select(r => r.PlateNumber)
+                                   .FirstOrDefault();
 
-            return _context.Notifications
-                           .Any(n => n.PlateNumber == plateNumber);
-        }
-
-        //public Violation? GetViolationByReportId(int reportId)
-        //{
-        //    return _context.Violations
-        //                   .Include(v => v.Report) 
-        //                   .FirstOrDefault(v => v.ReportId == reportId);
-        //}
-
-        public Violation? GetViolationByReportId(int reportId)
-        {
-            return _context.Violations
-                           .Include(v => v.ViolationType)
-                           .FirstOrDefault(v => v.ReportId == reportId);
-        }
-
-        public bool DoesVehicleExist(string plateNumber)
-        {
-            return _context.Vehicles.Any(v => v.PlateNumber == plateNumber);
-        }
-
+        return _context.Notifications
+                       .Any(n => n.PlateNumber == plateNumber);
     }
+
+    //public Violation? GetViolationByReportId(int reportId)
+    //{
+    //    return _context.Violations
+    //                   .Include(v => v.Report) 
+    //                   .FirstOrDefault(v => v.ReportId == reportId);
+    //}
+
+    public Violation? GetViolationByReportId(int reportId)
+    {
+        return _context.Violations
+                       .Include(v => v.ViolationType)
+                       .FirstOrDefault(v => v.ReportId == reportId);
+    }
+
+    public bool DoesVehicleExist(string plateNumber)
+    {
+        return _context.Vehicles.Any(v => v.PlateNumber == plateNumber);
+    }
+
+    public void ProcessViolationResponse(int violationId, string status, string rejectionReason = null)
+    {
+        var violation = _context.Violations.FirstOrDefault(v => v.ViolationId == violationId);
+        if (violation != null)
+        {
+            violation.Report.Status = status;
+            if (status == "Rejected")
+            {
+                violation.Report.RejectionReason = rejectionReason;
+            }
+            _context.SaveChanges();
+        }
+    }
+
+}
 }
 

@@ -29,6 +29,8 @@ public partial class Report
 
     public decimal? FineAmount { get; set; }
 
+    public int ResponseCount { get; set; }
+
     public int? ViolationTypeId { get; set; }
 
     public virtual User? ProcessedByNavigation { get; set; }
@@ -36,6 +38,7 @@ public partial class Report
     public virtual User Reporter { get; set; } = null!;
 
     public virtual ViolationType? ViolationType { get; set; }
+
     public virtual ICollection<Violation> Violations { get; set; } = new List<Violation>();
 
     [NotMapped]

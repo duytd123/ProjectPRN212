@@ -18,7 +18,7 @@ namespace BusinessObjects
             _policeRepository = policeRepository;
         }
 
-        public List<Report> GetAllReports()
+        public IQueryable<Report> GetAllReports()
         {
             return _policeRepository.GetAllReports();
         }
@@ -26,6 +26,11 @@ namespace BusinessObjects
         public int? GetLoggedInPoliceUserId(string email)
         {
             return _policeRepository.GetPoliceUserId(email);
+        }
+
+        public void SendNotification(int userId, string message, string plateNumber, decimal? fineAmount, DateTime? dueDate)
+        {
+            _policeRepository.SendNotification(userId, message, plateNumber, fineAmount, dueDate);
         }
 
         public void VerifyAndProcessReport(int reportId, string status, int processedBy)
@@ -60,6 +65,10 @@ namespace BusinessObjects
         public bool DoesVehicleExist(string plateNumber)
         {
             return _policeRepository.DoesVehicleExist(plateNumber);
+        }
+        public void ProcessViolationResponse(int violationId, string status, string rejectionReason = null)
+        {
+            _policeRepository.ProcessViolationResponse(violationId, status, rejectionReason);
         }
 
     }
