@@ -21,7 +21,7 @@
         <TextBlock Text="Session Timeout:" Grid.Row="0" Grid.Column="0" Margin="5"/>
         <TextBox Name="txtSessionTimeout" Grid.Row="0" Grid.Column="1" Margin="5"/>
 
-        <CheckBox Name="chkEnableLogging" Content="Enable Logging" Grid.Row="2" Grid.Column="0" Margin="5"/>
+        <CheckBox Name="chkEnableLogging" Content="Enable Login" Grid.Row="2" Grid.Column="0" Margin="5"/>
         <CheckBox Name="chkEnableTwoFactorAuth" Content="Enable Two-Factor Authentication" Grid.Row="2" Grid.Column="1" Margin="5"/>
         <CheckBox Name="chkEnableAutoLogout" Content="Enable Auto Logout" Grid.Row="3" Grid.Column="0" Margin="5"/>
 

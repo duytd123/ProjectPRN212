@@ -200,12 +200,12 @@ public partial class ProjectPrn212Context : DbContext
             entity.Property(e => e.ViolatorId).HasColumnName("ViolatorID");
 
             entity.HasOne(d => d.PlateNumberNavigation)
-     .WithMany(p => p.Violations)
-     .HasPrincipalKey(p => p.PlateNumber) // ✅ Chỉ định đúng khóa chính phụ của `Vehicle`
-     .HasForeignKey(d => d.PlateNumber) // ✅ Chỉ định rõ `PlateNumber` là FK
-     .IsRequired(false) // ✅ Cho phép null nếu cần
-     .OnDelete(DeleteBehavior.Restrict) // ✅ Tránh lỗi xóa
-     .HasConstraintName("FK_Violations_Vehicles");
+            .WithMany(p => p.Violations)
+             .HasPrincipalKey(p => p.PlateNumber) 
+            .HasForeignKey(d => d.PlateNumber) 
+            .IsRequired(false) 
+            .OnDelete(DeleteBehavior.Restrict) 
+            .HasConstraintName("FK_Violations_Vehicles");
 
             entity.HasOne(d => d.Report).WithMany(p => p.Violations)
                 .HasForeignKey(d => d.ReportId)

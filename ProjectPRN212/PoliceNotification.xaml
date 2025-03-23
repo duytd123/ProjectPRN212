@@ -45,7 +45,7 @@
 
         <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
             <TextBlock Text="💰 Tiền phạt (VND):" FontWeight="Bold" Margin="0,5,5,0"/>
-            <TextBox Name="FineAmountTextBox" Width="120" IsReadOnly="True"/>
+            <TextBox Name="FineAmountTextBox" Width="120" IsReadOnly="True" />
 
             <TextBlock Text="📅 Ngày hạn nộp:" FontWeight="Bold" Margin="10,5,5,0"/>
             <DatePicker Name="DueDatePicker" Width="150" IsEnabled="False"/>
