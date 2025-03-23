@@ -34,5 +34,14 @@ namespace BusinessObjects
         {
             return await _violationRepository.GetAllViolationTypes();
         }
+        public Violation GetViolationById(int violationId)
+        {
+            return _violationRepository.GetViolationById(violationId);
+        }
+
+        public void UpdateViolationResponse(int violationId, string response)
+        {
+            _violationRepository.UpdateViolationResponse(violationId, response);
+        }
     }
 }

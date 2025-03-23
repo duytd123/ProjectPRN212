@@ -47,5 +47,24 @@ namespace DataAccess.Repository
         {
             return await _context.ViolationTypes.ToListAsync();
         }
+        public Violation GetViolationById(int violationId)
+        {
+            return _context.Violations
+                .Include(v => v.Report)
+                .Include(v => v.Violator)
+                .FirstOrDefault(v => v.ViolationId == violationId);
+        }
+
+        public void UpdateViolationResponse(int violationId, string response)
+        {
+            var violation = _context.Violations.FirstOrDefault(v => v.ViolationId == violationId);
+            if (violation != null)
+            {
+                violation.Response = response;
+                violation.ResponseCount += 1;
+                violation.Report.Status = "Pending"; // Chuyển trạng thái đơn về Pending
+                _context.SaveChanges();
+            }
+        }
     }
 }

@@ -14,5 +14,7 @@ namespace DataAccess.Repository.Interface
         List<Violation> GetViolationsByType(int violationTypeId);
 
         Task<List<ViolationType>> GetAllViolationTypes();
+        Violation GetViolationById(int violationId);
+        void UpdateViolationResponse(int violationId, string response);
     }
 }

@@ -66,6 +66,30 @@ public partial class ProjectPrn212Context : DbContext
                 .HasConstraintName("FK__Notificat__UserI__797309D9");
         });
 
+        modelBuilder.Entity<Payment>(entity =>
+        {
+            entity.HasKey(e => e.PaymentId).HasName("PK__Payments__9B556A587B22CAA7");
+
+            entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
+            entity.Property(e => e.Amount).HasColumnType("decimal(10, 2)");
+            entity.Property(e => e.PaymentDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.PaymentMethod).HasMaxLength(50);
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.ViolationId).HasColumnName("ViolationID");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Payments)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Payments__UserID__4316F928");
+
+            entity.HasOne(d => d.Violation).WithMany(p => p.Payments)
+                .HasForeignKey(d => d.ViolationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Payments__Violat__440B1D61");
+        });
+
         modelBuilder.Entity<Report>(entity =>
         {
             entity.HasKey(e => e.ReportId).HasName("PK__Reports__D5BD48E5FF41F4D9");
@@ -143,6 +167,9 @@ public partial class ProjectPrn212Context : DbContext
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.Address).HasColumnType("text");
+            entity.Property(e => e.Balance)
+                .HasDefaultValue(100000.00m)
+                .HasColumnType("decimal(10, 2)");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .IsUnicode(false);
