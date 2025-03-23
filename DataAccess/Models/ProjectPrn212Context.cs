@@ -29,6 +29,7 @@ public partial class ProjectPrn212Context : DbContext
     public virtual DbSet<Violation> Violations { get; set; }
 
     public virtual DbSet<ViolationType> ViolationTypes { get; set; }
+    public virtual DbSet<Payment> Payments { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

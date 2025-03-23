@@ -131,7 +131,8 @@ namespace ProjectPRN212
 
         private void PayFineOnline_Click(object sender, RoutedEventArgs e)
         {
-
+            PaymentWindow paymentWindow = new PaymentWindow(currentUserId, new ProfileWindow(currentUserId));
+            paymentWindow.ShowDialog();
         }
 
         private void NotifyButton_Click(object sender, RoutedEventArgs e)
