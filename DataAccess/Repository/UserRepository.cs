@@ -117,14 +117,15 @@ namespace DataAccess.Repository
                                 return new KeyValuePair<DateTime, Tuple<int, string>>(timestamp, new Tuple<int, string>(userId, actionParts[1]));
                             }
                         }
-                    }
+                    
+                }
                     return default(KeyValuePair<DateTime, Tuple<int, string>>);
-                })
-                .Where(log => log.Key != default(DateTime)) 
+        })
+                .Where(log => log.Key != default(DateTime))
                 .ToList();
 
             return logs;
         }
 
-    }
+}
 }
