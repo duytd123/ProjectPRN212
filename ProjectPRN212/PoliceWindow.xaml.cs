@@ -41,6 +41,7 @@ namespace ProjectPRN212
             .Include(r => r.Reporter)
             .Include(r => r.ProcessedByNavigation)
             .Include(r => r.Violations)
+            .Include(r => r.ViolationType)
             .ToList();
 
                 foreach (var report in AllReports)
@@ -67,7 +68,7 @@ namespace ProjectPRN212
                     return;
                 }
 
-                Verification verificationWindow = new Verification(selectedReport, _policeObject,_policeUserId);
+                Verification verificationWindow = new Verification(selectedReport, _policeObject, _policeUserId);
                 verificationWindow.Show();
                 this.Close();
             }
@@ -111,7 +112,7 @@ namespace ProjectPRN212
                 (selectedDate == null || (report.ReportDate.HasValue && report.ReportDate.Value.Date == selectedDate.Value.Date)) &&
                 (selectedStatus == "All" || report.Status == selectedStatus) &&
                 (string.IsNullOrEmpty(searchText) ||
-                 (report.PlateNumber != null && report.PlateNumber.ToLower().Contains(searchText))) 
+                 (report.PlateNumber != null && report.PlateNumber.ToLower().Contains(searchText)))
             ).ToList();
 
             ReportsDataGrid.ItemsSource = filteredReports;
@@ -201,7 +202,7 @@ namespace ProjectPRN212
             {
                 if (window is LoginPage)
                 {
-                    return true; 
+                    return true;
                 }
             }
             return false;
