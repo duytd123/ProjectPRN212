@@ -58,16 +58,20 @@
             <!-- Show Password Checkbox -->
             <CheckBox x:Name="chkShowPassword" Content="Show Password" Grid.Row="4" Grid.Column="1" Margin="10" VerticalAlignment="Center" Checked="chkShowPassword_Checked" Unchecked="chkShowPassword_Unchecked"/>
 
+            <!-- Số tiền trong tài khoản -->
+            <Label Content="Balance:" Grid.Row="5" Grid.Column="0" Margin="10"/>
+            <TextBox x:Name="txtBalance" Grid.Row="5" Grid.Column="1" Margin="10" IsReadOnly="True"/>
+
             <!-- Phone -->
-            <Label Content="Phone:" Grid.Row="5" Grid.Column="0" Margin="10"/>
-            <TextBox x:Name="txtPhone" Grid.Row="5" Grid.Column="1" Margin="10"/>
+            <Label Content="Phone:" Grid.Row="6" Grid.Column="0" Margin="10"/>
+            <TextBox x:Name="txtPhone" Grid.Row="6" Grid.Column="1" Margin="10"/>
 
             <!-- Address -->
-            <Label Content="Address:" Grid.Row="6" Grid.Column="0" Margin="10"/>
-            <TextBox x:Name="txtAddress" Grid.Row="6" Grid.Column="1" Margin="10"/>
+            <Label Content="Address:" Grid.Row="7" Grid.Column="0" Margin="10"/>
+            <TextBox x:Name="txtAddress" Grid.Row="7" Grid.Column="1" Margin="10"/>
 
             <!-- Buttons -->
-            <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
                 <Button x:Name="btnSave" Content="Save" Width="100" Margin="5" Click="btnSave_Click"/>
                 <Button x:Name="btnCancel" Content="Cancel" Width="100" Margin="5" Click="btnCancel_Click"/>
             </StackPanel>

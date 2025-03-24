@@ -4,7 +4,6 @@ using System.Windows;
 
 namespace ProjectPRN212
 {
-
     public partial class ProfileWindow : Window
     {
         private readonly UserObject _userObject;
@@ -28,6 +27,7 @@ namespace ProjectPRN212
                 pwdConfirmPassword.Password = _currentUser.Password;
                 txtPhone.Text = _currentUser.Phone;
                 txtAddress.Text = _currentUser.Address;
+                txtBalance.Text = _currentUser.Balance.HasValue ? $"{_currentUser.Balance.Value:N0} VND" : "0 VND"; 
             }
             else
             {
@@ -85,6 +85,11 @@ namespace ProjectPRN212
             pwdConfirmPassword.Password = txtConfirmPassword.Text;
             pwdConfirmPassword.Visibility = Visibility.Visible;
             txtConfirmPassword.Visibility = Visibility.Collapsed;
+        }
+
+        public void UpdateBalance(decimal? newBalance)
+        {
+            txtBalance.Text = newBalance.HasValue ? $"{newBalance.Value:N0} VND" : "0 VND";
         }
     }
 }

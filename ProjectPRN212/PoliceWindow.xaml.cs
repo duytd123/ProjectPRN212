@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjectPRN212
 {
@@ -36,7 +37,11 @@ namespace ProjectPRN212
         {
             try
             {
-                AllReports = _policeObject.GetAllReports();
+                AllReports = _policeObject.GetAllReports()
+            .Include(r => r.Reporter)
+            .Include(r => r.ProcessedByNavigation)
+            .Include(r => r.Violations)
+            .ToList();
 
                 foreach (var report in AllReports)
                 {
@@ -47,8 +52,7 @@ namespace ProjectPRN212
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi khi tải danh sách biên bản:\n{ex.Message}",
-                                "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Lỗi khi tải danh sách biên bản:\n{ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
