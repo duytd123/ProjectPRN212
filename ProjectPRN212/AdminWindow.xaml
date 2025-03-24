@@ -2,31 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Quản trị viên hệ thống" Height="500" Width="900"
-        WindowStartupLocation="CenterScreen">
+         WindowStartupLocation="CenterScreen">
 
-    <Window.Resources>
-        <Style TargetType="Button">
-            <Setter Property="Background" Value="#007ACC"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Width" Value="120"/>
-            <Setter Property="Height" Value="35"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="2"/>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#005F99"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
 
     <Grid Margin="10" MouseDown="Grid_MouseDown_ClearForm">
         <Grid.RowDefinitions>
@@ -43,7 +20,6 @@
             <ColumnDefinition Width="1.5*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Filter Section -->
         <StackPanel Grid.Row="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="1">
             <TextBlock Text="Lọc vai trò:" VerticalAlignment="Center" Margin="5"/>
             <ComboBox Name="cmbFilterRole" Width="120" SelectionChanged="FilterUsers"/>
@@ -51,9 +27,10 @@
             <TextBox Name="txtFilterAddress" Width="150" TextChanged="FilterUsersAddress"/>
             <TextBlock Text="Lọc Tên:" VerticalAlignment="Center" Margin="5"/>
             <TextBox Name="txtSearchName" Width="150" TextChanged="FilterUsersName"/>
+
+
         </StackPanel>
 
-        <!-- DataGrid Section -->
         <DataGrid Grid.Row="1" Grid.ColumnSpan="3" Name="UsersGrid" AutoGenerateColumns="False" SelectionChanged="UsersGrid_SelectionChanged" IsReadOnly="True" Margin="0,10,0,10">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Tên tài khoản" Binding="{Binding FullName}" Width="*"/>
@@ -65,47 +42,32 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- Input Section -->
-        <Grid Grid.Row="2" Grid.ColumnSpan="3" Margin="0,10,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <TextBlock Text="Full Name:" Grid.Row="2" Grid.Column="0" Margin="5"/>
+        <TextBlock Text="Email:" Grid.Row="2" Grid.Column="1" Margin="5"/>
+        <TextBlock Text="Password:" Grid.Row="2" Grid.Column="2" Margin="5"/>
+        <TextBlock Text="Role:" Grid.Row="3" Grid.Column="0" Margin="5"/>
+        <TextBlock Text="Phone:" Grid.Row="3" Grid.Column="1" Margin="5"/>
+        <TextBlock Text="Address:" Grid.Row="3" Grid.Column="2" Margin="5"/>
 
-            <StackPanel Orientation="Vertical" Grid.Column="0">
-                <TextBlock Text="Full Name:"/>
-                <TextBox Name="txtFullName"/>
-                <TextBlock Text="Role:"/>
-                <ComboBox Name="cmbRole"/>
-            </StackPanel>
+        <TextBox Name="txtFullName" Grid.Row="2" Grid.Column="0" Margin="68,5,10,5"/>
+        <TextBox Name="txtEmail" Grid.Row="2" Grid.Column="1" IsReadOnly="True" Margin="46,5,5,5"/>
+        <PasswordBox Name="txtPassword" Grid.Row="2" Grid.Column="2" IsEnabled="False" Margin="63,5,5,5"/>
 
-            <StackPanel Orientation="Vertical" Grid.Column="1">
-                <TextBlock Text="Email:"/>
-                <TextBox Name="txtEmail" IsReadOnly="True"/>
-                <TextBlock Text="Phone:"/>
-                <TextBox Name="txtPhone"/>
-            </StackPanel>
+        <ComboBox Name="cmbRole" Grid.Row="3" Grid.Column="0" Margin="37,5,5,5"/>
 
-            <StackPanel Orientation="Vertical" Grid.Column="2">
-                <TextBlock Text="Password:"/>
-                <PasswordBox Name="txtPassword" IsEnabled="False"/>
-                <TextBlock Text="Address:"/>
-                <TextBox Name="txtAddress"/>
-            </StackPanel>
-        </Grid>
+        <TextBox Name="txtPhone" Grid.Row="3" Grid.Column="1" Margin="46,5,5,5"/>
+        <TextBox Name="txtAddress" Grid.Row="3" Grid.Column="2" Margin="63,5,5,5"/>
 
-        <!-- Button Section -->
-        <StackPanel Grid.Row="4" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-            <Button Name="btnAddUser" Content="Thêm người dùng" Background="#28A745"/>
-            <Button Name="btnUpdateUser" Content="Cập nhật" Background="#007ACC"/>
-            <Button Name="btnDisableUser" Content="Khóa tài khoản" Background="#DC3545"/>
-            <Button Name="btnEnableUser" Content="Mở tài khoản" Background="#FFC107" Foreground="Black"/>
-            <Button Name="btnSecurityLogin" Content="Xem tình trạng login" Width="159"/>
-            <Button x:Name="btnConfigSystem" Content="Cấu hình hệ thống" Width="167"/>
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,10" Width="860">
+            <Button Name="btnAddUser" Content="Thêm người dùng" Width="100" Margin="5" Click="btnAddUser_Click"/>
+            <Button Name="btnUpdateUser" Content="Cập nhật" Width="100" Margin="5" Click="btnUpdateUser_Click"/>
+            <Button Name="btnDisableUser" Content="Khóa tài khoản" Width="100" Margin="5" Click="btnDisableUser_Click"/>
+            <Button Name="btnEnableUser" Content="Mở tài khoản" Width="120" Margin="5" Click="btnEnableUser_Click"/>
+            <Button Name="btnSecurityLogin" Content="Xem tình trạng login" Width="126" Margin="5" Click="btnSecutiryLogin_Click"/>
+            <Button Name="btnConfigSystem" Content="Cấu hình hệ thống" Width="108" Margin="5" Click="btnConfigSystem_Click"/>
         </StackPanel>
-
-        <Button Name="btnLogout" Content="Đăng xuất" Grid.Column="2" HorizontalAlignment="Right" Margin="0,-2,0,284" Background="#6C757D" Grid.RowSpan="2"/>
-
+        
+        <Button Name="btnLogout" Content="Đăng xuất" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" Margin="10" Click="btnLogout_Click"/>
+        
     </Grid>
 </Window>
