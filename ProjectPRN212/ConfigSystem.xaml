@@ -6,6 +6,31 @@
         xmlns:local="clr-namespace:ProjectPRN212"
         mc:Ignorable="d"
         Title="Cấu hình hệ thống" Height="450" Width="800">
+
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#007ACC"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="2"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#005F99"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -13,22 +38,25 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Session Timeout:" Grid.Row="0" Grid.Column="0" Margin="5"/>
+        <!-- Input Section -->
+        <TextBlock Text="Session Timeout:" Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
         <TextBox Name="txtSessionTimeout" Grid.Row="0" Grid.Column="1" Margin="5"/>
 
-        <CheckBox Name="chkEnableLogging" Content="Enable Login" Grid.Row="2" Grid.Column="0" Margin="5"/>
-        <CheckBox Name="chkEnableTwoFactorAuth" Content="Enable Two-Factor Authentication" Grid.Row="2" Grid.Column="1" Margin="5"/>
-        <CheckBox Name="chkEnableAutoLogout" Content="Enable Auto Logout" Grid.Row="3" Grid.Column="0" Margin="5"/>
+        <!-- CheckBox Section -->
+        <CheckBox Name="chkEnableLogging" Content="Enable Login" Grid.Row="1" Grid.Column="0" Margin="5"/>
+        <CheckBox Name="chkEnableTwoFactorAuth" Content="Enable Two-Factor Authentication" Grid.Row="1" Grid.Column="1" Margin="5"/>
+        <CheckBox Name="chkEnableAutoLogout" Content="Enable Auto Logout" Grid.Row="2" Grid.Column="0" Margin="5"/>
 
-        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-            <Button Name="btnSaveSettings" Content="Lưu" Width="150" Margin="5" Click="btnSaveSettings_Click"/>
-            <Button Name="btnBackToAdmin" Content="Trở lại" Width="150" Margin="5" Click="btnBackToAdmin_Click"/>
+        <!-- Button Section -->
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <Button Name="btnSaveSettings" Content="Lưu" Click="btnSaveSettings_Click"/>
+            <Button Name="btnBackToAdmin" Content="Trở lại" Click="btnBackToAdmin_Click"/>
         </StackPanel>
     </Grid>
 </Window>
-
