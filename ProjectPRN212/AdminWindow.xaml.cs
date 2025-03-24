@@ -18,8 +18,7 @@ namespace ProjectPRN212
     /// </summary>
     public partial class AdminWindow : Window
     {
-        private DispatcherTimer _sessionTimer;
-        
+        private DispatcherTimer _sessionTimer; 
         private readonly AdminObject _adminObject;
         public AdminWindow()
         {

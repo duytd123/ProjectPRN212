@@ -99,7 +99,7 @@ namespace ProjectPRN212
                     RejectionReasonTextBlock.Text = $"Lý do: {rejectionReason}";
                     RejectionReasonTextBlock.Visibility = Visibility.Visible;
 
-                    MessageBox.Show($"Báo cáo đã bị từ chối do không tìm thấy biển số phù hợp!",
+                    MessageBox.Show($"Báo cáo đã bị từ chối tự động do không tìm thấy biển số phù hợp!",
                         "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
