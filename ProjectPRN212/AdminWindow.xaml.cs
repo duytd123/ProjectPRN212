@@ -41,16 +41,24 @@ namespace ProjectPRN212
 
         private void LoadRoles()
         {
-                var roles = _adminObject.GetAllUsers()
+            var role = _adminObject.GetAllUsers()
+                                  .Select(u => u.Role)
+                                  .Distinct()
+                                  .Where(role => role != "Admin")
+                                  .ToList();
+
+            var roles = _adminObject.GetAllUsers()
                                    .Select(u => u.Role)
                                    .Distinct()
                                    .Where(role => role != "Admin")
                                    .ToList();
-                cmbRole.ItemsSource = roles;
-            roles.Insert(0, "All");
+
+            roles.Insert(0, "ALL");
+            cmbRole.ItemsSource = role;
             cmbFilterRole.ItemsSource = roles;
             cmbFilterRole.SelectedIndex = 0;
         }       
+
         private void ResetForm()
         {
             txtFullName.Clear();
@@ -233,7 +241,7 @@ namespace ProjectPRN212
         {
             var filteredUsers = _adminObject.GetAllUsers().Where(u => u.Role != "Admin");
 
-            if (cmbFilterRole.SelectedItem != null && cmbFilterRole.SelectedItem.ToString() != "All")
+            if (cmbFilterRole.SelectedItem != null && cmbFilterRole.SelectedItem.ToString() != "ALL")
             {
                 filteredUsers = filteredUsers.Where(u => u.Role == cmbFilterRole.SelectedItem.ToString());
             }
@@ -243,7 +251,6 @@ namespace ProjectPRN212
         private void FilterUsersName(object sender, TextChangedEventArgs e)
         {
             
-
             var filteredUsers = _adminObject.GetAllUsers().Where(u => u.Role != "Admin");
 
             if (!string.IsNullOrWhiteSpace(txtSearchName.Text))
@@ -303,7 +310,7 @@ namespace ProjectPRN212
         private void SessionTimeoutHandler(object sender, EventArgs e)
         {
             _sessionTimer?.Stop();
-            MessageBox.Show("You have been automatically logged out due to inactivity.", "Session Timeout", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Hết phiên đăng nhập tài khoản đã bị đăng xuất", "Session Timeout", MessageBoxButton.OK, MessageBoxImage.Information);
             if (!IsLoginPageOpen())
             {
                 LoginPage loginPage = new LoginPage();
@@ -323,5 +330,6 @@ namespace ProjectPRN212
             }
             return false;
         }
+
     }
 }
