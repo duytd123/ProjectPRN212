@@ -34,6 +34,13 @@ namespace ProjectPRN212
         private void LoadViolations()
         {
             var violations = _violationRepository.GetViolationsByUserId(_userId);
+
+            var overdueViolations = violations
+                .Where(v => !v.PaidStatus &&
+                            v.FineDate.HasValue &&
+                            v.FineDate.Value < DateTime.Now)
+                .ToList();
+
             ViolationsDataGrid.ItemsSource = violations;
         }
 
@@ -48,6 +55,16 @@ namespace ProjectPRN212
                     return;
                 }
 
+                if (selectedViolation.FineDate.HasValue)
+                {
+                    if (selectedViolation.FineDate.Value < DateTime.Now)
+                    {
+                        MessageTextBlock.Text = "Vi phạm này đã quá hạn. Vui lòng nộp phạt trực tiếp tại cơ quan công an gần nhất.";
+                        MessageTextBlock.Foreground = Brushes.Red;
+                        return;
+                    }
+                }
+
                 var user = _userRepository.GetUserById(_userId);
                 if (user.Balance < selectedViolation.FineAmount)
                 {
@@ -58,7 +75,6 @@ namespace ProjectPRN212
 
                 selectedViolation.PaidStatus = true;
                 user.Balance -= selectedViolation.FineAmount ?? 0;
-
                 var payment = new Payment
                 {
                     UserId = _userId,
@@ -77,7 +93,6 @@ namespace ProjectPRN212
                 }
 
                 _profileWindow.UpdateBalance(user.Balance);
-
                 MessageTextBlock.Text = "Thanh toán thành công!";
                 LoadViolations();
                 LoadBalance();

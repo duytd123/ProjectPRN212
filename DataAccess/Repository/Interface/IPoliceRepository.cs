@@ -10,6 +10,7 @@ namespace DataAccess.Repository.Interface
         void VerifyAndProcessReport(int reportId, string status, int processedBy, string? rejectionReason = null);
         User? GetUserByPlateNumber(string plateNumber);
         bool HasNotificationBeenSent(int reportId);
+        void UpdateReportNotificationStatus(int reportId, bool notificationSent);
         Violation? GetViolationByReportId(int reportId);
         void ProcessViolationResponse(int violationId, string status, string rejectionReason = null);
         bool DoesVehicleExist(string plateNumber);

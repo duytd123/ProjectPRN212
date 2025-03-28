@@ -151,50 +151,50 @@ namespace DataAccess.Repository
             _context.SaveChanges();
         }
 
-    public bool HasNotificationBeenSent(int reportId)
-    {
-        var plateNumber = _context.Reports
-                                   .Where(r => r.ReportId == reportId)
-                                   .Select(r => r.PlateNumber)
-                                   .FirstOrDefault();
-
-        return _context.Notifications
-                       .Any(n => n.PlateNumber == plateNumber);
-    }
-
-    //public Violation? GetViolationByReportId(int reportId)
-    //{
-    //    return _context.Violations
-    //                   .Include(v => v.Report) 
-    //                   .FirstOrDefault(v => v.ReportId == reportId);
-    //}
-
-    public Violation? GetViolationByReportId(int reportId)
-    {
-        return _context.Violations
-                       .Include(v => v.ViolationType)
-                       .FirstOrDefault(v => v.ReportId == reportId);
-    }
-
-    public bool DoesVehicleExist(string plateNumber)
-    {
-        return _context.Vehicles.Any(v => v.PlateNumber == plateNumber);
-    }
-
-    public void ProcessViolationResponse(int violationId, string status, string rejectionReason = null)
-    {
-        var violation = _context.Violations.FirstOrDefault(v => v.ViolationId == violationId);
-        if (violation != null)
+        public bool HasNotificationBeenSent(int reportId)
         {
-            violation.Report.Status = status;
-            if (status == "Rejected")
-            {
-                violation.Report.RejectionReason = rejectionReason;
-            }
-            _context.SaveChanges();
+            return _context.Reports
+                   .Where(r => r.ReportId == reportId)
+                   .Select(r => r.NotificationSent)
+                   .FirstOrDefault();
         }
-    }
 
-}
+        public void UpdateReportNotificationStatus(int reportId, bool notificationSent)
+        {
+                var report = _context.Reports.FirstOrDefault(r => r.ReportId == reportId);
+                if (report != null)
+                {
+                    report.NotificationSent = notificationSent;
+                    _context.SaveChanges();
+                }
+        }
+
+        public Violation? GetViolationByReportId(int reportId)
+        {
+            return _context.Violations
+                           .Include(v => v.ViolationType)
+                           .FirstOrDefault(v => v.ReportId == reportId);
+        }
+
+        public bool DoesVehicleExist(string plateNumber)
+        {
+            return _context.Vehicles.Any(v => v.PlateNumber == plateNumber);
+        }
+
+        public void ProcessViolationResponse(int violationId, string status, string rejectionReason = null)
+        {
+            var violation = _context.Violations.FirstOrDefault(v => v.ViolationId == violationId);
+            if (violation != null)
+            {
+                violation.Report.Status = status;
+                if (status == "Rejected")
+                {
+                    violation.Report.RejectionReason = rejectionReason;
+                }
+                _context.SaveChanges();
+            }
+        }
+
+    }
 }
 

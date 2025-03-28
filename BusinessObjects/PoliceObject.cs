@@ -58,6 +58,11 @@ namespace BusinessObjects
             return _policeRepository.HasNotificationBeenSent(reportId);
         }
 
+        public void UpdateReportNotificationStatus(int reportId, bool notificationSent)
+        {
+            _policeRepository.UpdateReportNotificationStatus(reportId, notificationSent);
+        }
+
         public Violation? GetViolationByReportId(int reportId)
         {
             return _policeRepository.GetViolationByReportId(reportId);

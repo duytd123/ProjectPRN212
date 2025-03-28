@@ -58,16 +58,11 @@ namespace ProjectPRN212
         }
 
 
+
         private void VerifyButton_Click(object sender, RoutedEventArgs e)
         {
             if (ReportsDataGrid.SelectedItem is Report selectedReport)
             {
-                if (selectedReport.NotificationSent)
-                {
-                    MessageBox.Show("Biên bản này đã được thông báo và không thể xác minh lại.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-
                 Verification verificationWindow = new Verification(selectedReport, _policeObject, _policeUserId);
                 verificationWindow.Show();
                 this.Close();

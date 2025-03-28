@@ -41,6 +41,5 @@ public partial class Report
 
     public virtual ICollection<Violation> Violations { get; set; } = new List<Violation>();
 
-    [NotMapped]
     public bool NotificationSent { get; set; }
 }
