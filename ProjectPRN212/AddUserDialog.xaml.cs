@@ -27,11 +27,14 @@ namespace ProjectPRN212
             InitializeComponent();
             _adminObject = adminObject;
 
+
             cmbRole.ItemsSource = _adminObject.GetAllUsers()
                                               .Select(u => u.Role)
                                               .Distinct()
                                               .Where(role => role != "Admin")
                                               .ToList();
+
+            //cmbRole.ItemsSource = _adminObject.GetRoles();
         }
 
         private void btnAddUser_Click(object sender, RoutedEventArgs e)
