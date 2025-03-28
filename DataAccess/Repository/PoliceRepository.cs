@@ -161,53 +161,50 @@ namespace DataAccess.Repository
             _context.SaveChanges();
         }
 
-        public bool HasNotificationBeenSent(int reportId)
-        {
-            //var plateNumber = _context.Reports
-            //                           .Where(r => r.ReportId == reportId)
-            //                           .Select(r => r.PlateNumber)
-            //                           .FirstOrDefault();
+    public bool HasNotificationBeenSent(int reportId)
+    {
+        var plateNumber = _context.Reports
+                                   .Where(r => r.ReportId == reportId)
+                                   .Select(r => r.PlateNumber)
+                                   .FirstOrDefault();
 
-            //return _context.Notifications
-            //               .Any(n => n.PlateNumber == plateNumber);
-            _context.ChangeTracker.Clear(); // Đảm bảo lấy dữ liệu mới từ DB
-            return _context.Notifications.AsNoTracking().Any(n => n.ReportId == reportId);
+        return _context.Notifications
+                       .Any(n => n.PlateNumber == plateNumber);
+    }
 
-        }
+    //public Violation? GetViolationByReportId(int reportId)
+    //{
+    //    return _context.Violations
+    //                   .Include(v => v.Report) 
+    //                   .FirstOrDefault(v => v.ReportId == reportId);
+    //}
 
-        //public Violation? GetViolationByReportId(int reportId)
-        //{
-        //    return _context.Violations
-        //                   .Include(v => v.Report) 
-        //                   .FirstOrDefault(v => v.ReportId == reportId);
-        //}
-
-        public Violation? GetViolationByReportId(int reportId)
+    public Violation? GetViolationByReportId(int reportId)
     {
         return _context.Violations
                        .Include(v => v.ViolationType)
                        .FirstOrDefault(v => v.ReportId == reportId);
     }
 
-    public bool DoesVehicleExist(string plateNumber)
-    {
-        return _context.Vehicles.Any(v => v.PlateNumber == plateNumber);
-    }
-
-    public void ProcessViolationResponse(int violationId, string status, string rejectionReason = null)
-    {
-        var violation = _context.Violations.FirstOrDefault(v => v.ViolationId == violationId);
-        if (violation != null)
+        public bool DoesVehicleExist(string plateNumber)
         {
-            violation.Report.Status = status;
-            if (status == "Rejected")
-            {
-                violation.Report.RejectionReason = rejectionReason;
-            }
-            _context.SaveChanges();
+            return _context.Vehicles.Any(v => v.PlateNumber == plateNumber);
         }
-    }
 
-}
+        public void ProcessViolationResponse(int violationId, string status, string rejectionReason = null)
+        {
+            var violation = _context.Violations.FirstOrDefault(v => v.ViolationId == violationId);
+            if (violation != null)
+            {
+                violation.Report.Status = status;
+                if (status == "Rejected")
+                {
+                    violation.Report.RejectionReason = rejectionReason;
+                }
+                _context.SaveChanges();
+            }
+        }
+
+    }
 }
 

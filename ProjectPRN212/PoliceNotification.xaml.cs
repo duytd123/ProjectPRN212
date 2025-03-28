@@ -94,6 +94,11 @@ namespace ProjectPRN212
                     MessageBox.Show("Vui lòng chọn ngày hạn nộp phạt.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
+                if (DueDatePicker.SelectedDate.Value <= DateTime.Today)
+                {
+                    MessageBox.Show("Ngày hạn nộp phạt phải sau ngày hôm nay.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
                 DateTime selectedDueDate = DueDatePicker.SelectedDate.Value;
 
@@ -118,6 +123,7 @@ namespace ProjectPRN212
                 }
 
                 dueDate = DueDatePicker.SelectedDate;
+                violation.FineDate = dueDate;
             }
 
             _policeObject.VerifyAndProcessReport(_selectedReport.ReportId, "Approved", _policeUserId);
@@ -130,6 +136,7 @@ namespace ProjectPRN212
             string violatorMessage = $"Biển số xe {_selectedReport.PlateNumber} của bạn đã bị phản ánh vi phạm.";
             _notifyObject.AddNotification(user.UserId, violatorMessage, _selectedReport.PlateNumber);
 
+            _policeObject.UpdateReportNotificationStatus(_selectedReport.ReportId, true);
             MessageBox.Show("Xử lý báo cáo và gửi thông báo thành công.", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
             PoliceWindow policeWindow = new PoliceWindow(_policeObject, _policeUserId);
             policeWindow.Show();

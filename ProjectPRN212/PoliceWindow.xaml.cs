@@ -62,18 +62,13 @@ namespace ProjectPRN212
             }
         }
 
-        //------------------
+
         private void VerifyButton_Click(object sender, RoutedEventArgs e)
         {
             
             if (ReportsDataGrid.SelectedItem is Report selectedReport)
             {
-                // Debug dữ liệu thực tế
-                MessageBox.Show($"Status: {selectedReport.Status}\n" +
-                                $"NotificationSent: {selectedReport.NotificationSent}\n" +
-                                $"RejectionReason: {selectedReport.RejectionReason ?? "NULL"}", "Debug");
-
-                if (selectedReport.NotificationSent || !string.IsNullOrWhiteSpace(selectedReport.RejectionReason))
+                if (selectedReport.NotificationSent)
                 {
                     MessageBox.Show("Biên bản này đã được thông báo và không thể xác minh lại.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
