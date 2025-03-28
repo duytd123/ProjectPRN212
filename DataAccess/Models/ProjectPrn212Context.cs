@@ -55,7 +55,7 @@ public partial class ProjectPrn212Context : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.UserId).HasColumnName("UserID");
-
+            entity.Property(e => e.ReportId).HasColumnName("ReportID");
             entity.HasOne(d => d.PlateNumberNavigation).WithMany(p => p.Notifications)
                 .HasPrincipalKey(p => p.PlateNumber)
                 .HasForeignKey(d => d.PlateNumber)
@@ -108,6 +108,7 @@ public partial class ProjectPrn212Context : DbContext
             entity.Property(e => e.Location)
                 .HasMaxLength(255)
                 .IsUnicode(false);
+            entity.Property(e => e.NotificationSent).HasDefaultValue(false);
             entity.Property(e => e.PlateNumber)
                 .HasMaxLength(15)
                 .IsUnicode(false);

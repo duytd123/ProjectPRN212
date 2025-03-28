@@ -28,7 +28,7 @@ namespace ProjectPRN212
             _policeObject = new PoliceObject(_policeRepository);
 
             _trustedDeviceRepository = new TrustedDeviceRepository(new ProjectPrn212Context());
-            _currentDeviceToken = GenerateDeviceToken();
+            _currentDeviceToken = string.Empty;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -68,7 +68,7 @@ namespace ProjectPRN212
                     return;
                 }
 
-                if (user.Role.Equals("Admin"))
+                if (user.Role.Equals("Admin") || user.Role.Equals("TrafficPolice"))
                 {
                     OpenUserWindow(user);
                     return;
@@ -79,6 +79,12 @@ namespace ProjectPRN212
                     MessageBox.Show("Định dạng email không hợp lệ! Vui lòng nhập đúng định dạng.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
+
+                if (user != null)
+                {
+                    _currentDeviceToken = GenerateDeviceToken(user.UserId);
+                }
+
 
                 bool isTwoFactorEnabled = config?.EnableTwoFactorAuth ?? false;
                 bool isTrustedDevice = _trustedDeviceRepository.IsDeviceTrusted(user.UserId, _currentDeviceToken);
@@ -175,11 +181,12 @@ namespace ProjectPRN212
             string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
             return Regex.IsMatch(email, emailPattern);
         }
-        private string GenerateDeviceToken()
+        private string GenerateDeviceToken(int userId)
         {
             string deviceName = Environment.MachineName;
             string userName = Environment.UserName;
-            return $"{deviceName}-{userName}";
+            return $"{deviceName}-{userName}-{userId}";
+
         }
 
         private string GenerateOtp()

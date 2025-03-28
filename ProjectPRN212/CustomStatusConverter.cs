@@ -14,15 +14,20 @@ namespace ProjectPRN212
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (parameter == null)
+                return DependencyProperty.UnsetValue;
+
+            string param = parameter.ToString();
+
             if (value is bool boolValue)
             {
                 if (targetType == typeof(string))
                 {
-                    return parameter?.ToString() switch
+                    return param switch
                     {
                         "Payment" => boolValue ? "✅ Paid" : "❌ Unpaid",
                         "Notification" => boolValue ? "📨 Sent" : "❌ Not Sent",
-                        _ => value
+                        _ => DependencyProperty.UnsetValue
                     };
                 }
                 else if (targetType == typeof(Brush))

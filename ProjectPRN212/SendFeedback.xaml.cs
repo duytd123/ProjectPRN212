@@ -84,7 +84,8 @@ namespace ProjectPRN212
                     VideoUrl = videoUrl,
                     Location = txtLocation.Text,
                     ReportDate = DateTime.Now,
-                    Status = "Pending"
+                    Status = "Pending",
+                    NotificationSent = false
                 };
 
                 bool result = await _reportObjects.AddReport(report);

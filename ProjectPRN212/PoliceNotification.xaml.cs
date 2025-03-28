@@ -95,10 +95,34 @@ namespace ProjectPRN212
                     return;
                 }
 
+                DateTime selectedDueDate = DueDatePicker.SelectedDate.Value;
+
+                if (!_selectedReport.ReportDate.HasValue)
+                {
+                    MessageBox.Show("Ngày tạo báo cáo không hợp lệ.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                DateTime dayCreationDate = _selectedReport.ReportDate.Value;
+
+                if (selectedDueDate < DateTime.Now.Date)
+                {
+                    MessageBox.Show("Ngày hạn nộp phạt không thể ở trong quá khứ.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (selectedDueDate > dayCreationDate.AddYears(1))
+                {
+                    MessageBox.Show("Ngày hạn nộp phạt không được quá 1 năm kể từ ngày báo cáo.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
                 dueDate = DueDatePicker.SelectedDate;
             }
 
             _policeObject.VerifyAndProcessReport(_selectedReport.ReportId, "Approved", _policeUserId);
+
+            _policeObject.UpdateNotificationStatus(_selectedReport.ReportId, true);
 
             string reporterMessage = $"Đơn phản ánh của bạn về xe biển số {_selectedReport.PlateNumber} đã được duyệt.";
             _notifyObject.AddNotification(_selectedReport.ReporterId, reporterMessage, _selectedReport.PlateNumber);

@@ -102,7 +102,7 @@ namespace DataAccess.Repository
 
             var logs = File.ReadAllLines(LogFilePath)
                 .Select(line =>
-                {
+                { 
                     var parts = line.Split(new[] { ": User ID " }, StringSplitOptions.None);
                     if (parts.Length == 2)
                     {
@@ -117,15 +117,15 @@ namespace DataAccess.Repository
                                 return new KeyValuePair<DateTime, Tuple<int, string>>(timestamp, new Tuple<int, string>(userId, actionParts[1]));
                             }
                         }
-                    
-                }
+
+                    }
                     return default(KeyValuePair<DateTime, Tuple<int, string>>);
-        })
+                })
                 .Where(log => log.Key != default(DateTime))
                 .ToList();
 
             return logs;
         }
 
-}
+    }
 }

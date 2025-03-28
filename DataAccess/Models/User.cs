@@ -20,7 +20,7 @@ public partial class User
 
     public string? Address { get; set; }
 
-    public bool? IsDisabled { get; set; }
+    public bool? IsDisabled { get; set; } = false;
 
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 

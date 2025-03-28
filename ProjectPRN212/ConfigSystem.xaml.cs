@@ -43,8 +43,7 @@ namespace ProjectPRN212
                 var config = JsonConvert.DeserializeObject<SystemConfig>(configJson);
                 if (config != null)
                 {
-                    txtSessionTimeout.Text = config.SessionTimeout.ToString();
-                  
+                    txtSessionTimeout.Text = config.SessionTimeout.ToString();                  
                     chkEnableLogging.IsChecked = config.EnableLogging;
                     chkEnableTwoFactorAuth.IsChecked = config.EnableTwoFactorAuth;
                     chkEnableAutoLogout.IsChecked = config.EnableAutoLogout;

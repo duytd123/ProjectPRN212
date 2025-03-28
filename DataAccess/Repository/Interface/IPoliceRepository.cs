@@ -14,5 +14,7 @@ namespace DataAccess.Repository.Interface
         void ProcessViolationResponse(int violationId, string status, string rejectionReason = null);
         bool DoesVehicleExist(string plateNumber);
         int? GetPoliceUserId(string email);
+
+        void UpdateNotification(int reportId, bool status);
     }
 }

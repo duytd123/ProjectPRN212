@@ -16,6 +16,8 @@ public partial class Notification
 
     public bool IsRead { get; set; } = false;
 
+    public int ReportId { get; set; }
+
     public virtual Vehicle? PlateNumberNavigation { get; set; }
 
     public virtual User User { get; set; } = null!;

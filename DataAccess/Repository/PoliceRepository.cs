@@ -112,6 +112,16 @@ namespace DataAccess.Repository
                            .FirstOrDefault();
         }
 
+        public void UpdateNotification(int reportId, bool status)
+        {
+            var report = _context.Reports.FirstOrDefault(r => r.ReportId == reportId);
+            if (report != null)
+            {
+                report.NotificationSent = status;
+                _context.SaveChanges();
+            }
+        }
+
 
         public void VerifyAndProcessReport(int reportId, string status, int processedBy, string? rejectionReason = null)
         {
@@ -151,25 +161,28 @@ namespace DataAccess.Repository
             _context.SaveChanges();
         }
 
-    public bool HasNotificationBeenSent(int reportId)
-    {
-        var plateNumber = _context.Reports
-                                   .Where(r => r.ReportId == reportId)
-                                   .Select(r => r.PlateNumber)
-                                   .FirstOrDefault();
+        public bool HasNotificationBeenSent(int reportId)
+        {
+            //var plateNumber = _context.Reports
+            //                           .Where(r => r.ReportId == reportId)
+            //                           .Select(r => r.PlateNumber)
+            //                           .FirstOrDefault();
 
-        return _context.Notifications
-                       .Any(n => n.PlateNumber == plateNumber);
-    }
+            //return _context.Notifications
+            //               .Any(n => n.PlateNumber == plateNumber);
+            _context.ChangeTracker.Clear(); // Đảm bảo lấy dữ liệu mới từ DB
+            return _context.Notifications.AsNoTracking().Any(n => n.ReportId == reportId);
 
-    //public Violation? GetViolationByReportId(int reportId)
-    //{
-    //    return _context.Violations
-    //                   .Include(v => v.Report) 
-    //                   .FirstOrDefault(v => v.ReportId == reportId);
-    //}
+        }
 
-    public Violation? GetViolationByReportId(int reportId)
+        //public Violation? GetViolationByReportId(int reportId)
+        //{
+        //    return _context.Violations
+        //                   .Include(v => v.Report) 
+        //                   .FirstOrDefault(v => v.ReportId == reportId);
+        //}
+
+        public Violation? GetViolationByReportId(int reportId)
     {
         return _context.Violations
                        .Include(v => v.ViolationType)

@@ -46,9 +46,14 @@ namespace ProjectPRN212
 
                 foreach (var report in AllReports)
                 {
-                    report.NotificationSent = _policeObject.HasNotificationBeenSent(report.ReportId);
+                    bool isSent = _policeObject.HasNotificationBeenSent(report.ReportId);
+                    report.NotificationSent = isSent;
+
+                    // Debug xem dữ liệu thực tế
+                    Console.WriteLine($"ReportID: {report.ReportId}, NotificationSent: {isSent}");
                 }
 
+                ReportsDataGrid.ItemsSource = null;
                 ReportsDataGrid.ItemsSource = AllReports;
             }
             catch (Exception ex)
@@ -57,12 +62,18 @@ namespace ProjectPRN212
             }
         }
 
-
+        //------------------
         private void VerifyButton_Click(object sender, RoutedEventArgs e)
         {
+            
             if (ReportsDataGrid.SelectedItem is Report selectedReport)
             {
-                if (selectedReport.NotificationSent)
+                // Debug dữ liệu thực tế
+                MessageBox.Show($"Status: {selectedReport.Status}\n" +
+                                $"NotificationSent: {selectedReport.NotificationSent}\n" +
+                                $"RejectionReason: {selectedReport.RejectionReason ?? "NULL"}", "Debug");
+
+                if (selectedReport.NotificationSent || !string.IsNullOrWhiteSpace(selectedReport.RejectionReason))
                 {
                     MessageBox.Show("Biên bản này đã được thông báo và không thể xác minh lại.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
@@ -87,11 +98,15 @@ namespace ProjectPRN212
                     MessageBox.Show("Bạn chỉ có thể gửi thông báo cho biên bản đã được phê duyệt.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
+                MessageBox.Show($"Status: {selectedReport.Status}\n" +
+                                $"NotificationSent: {selectedReport.NotificationSent}\n" +
+                                $"RejectionReason: {selectedReport.RejectionReason ?? "NULL"}", "Debug");
                 if (selectedReport.NotificationSent)
                 {
                     MessageBox.Show("Thông báo đã được gửi cho biên bản này.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
+
                 PoliceNotification policeNotification = new PoliceNotification(selectedReport, _policeObject, _policeUserId);
                 policeNotification.Show();
                 this.Close();

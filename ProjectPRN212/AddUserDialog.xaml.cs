@@ -72,7 +72,8 @@ namespace ProjectPRN212
                     Password = txtPassword.Password,
                     Role = cmbRole.Text,
                     Phone = txtPhone.Text,
-                    Address = txtAddress.Text
+                    Address = txtAddress.Text,
+                    IsDisabled = false
                 };
                 DialogResult = true;
                 Close();
