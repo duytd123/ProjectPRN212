@@ -49,6 +49,12 @@ namespace ProjectPRN212
                     return;
                 }
 
+                if (!txtPhone.Text.All(char.IsDigit))
+                {
+                    MessageBox.Show("Số điện thoại không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
                 _currentUser.FullName = txtFullName.Text;
                 _currentUser.Password = newPassword;
                 _currentUser.Phone = txtPhone.Text;
